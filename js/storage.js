@@ -37,4 +37,16 @@ class StorageManager {
     Object.assign(stats, updates);
     localStorage.setItem(this.STATS_KEY, JSON.stringify(stats));
   }
+  
+  // 获取默认统计数据
+  getDefaultStats() {
+    return {
+      totalWords: 0,
+      streakDays: 0,
+      lastStudyDate: null,
+      totalReviews: 0,
+      correctAnswers: 0,
+      accuracy: 0
+    };
+  }
 }

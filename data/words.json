@@ -1,0 +1,53 @@
+[
+  {
+    "id": "1",
+    "word": "vocabulary",
+    "pronunciation": "/vəˈkæbjʊləri/",
+    "meanings": [
+      {
+        "partOfSpeech": "noun",
+        "definition": "The body of words used in a particular language.",
+        "example": "Reading helps expand your vocabulary."
+      }
+    ],
+    "difficulty": 0,
+    "frequency": 1.0,
+    "addedDate": "2024-01-15T10:00:00.000Z",
+    "reviewCount": 0,
+    "passCount": 0
+  },
+  {
+    "id": "2",
+    "word": "example",
+    "pronunciation": "/ɪɡˈzæmpəl/",
+    "meanings": [
+      {
+        "partOfSpeech": "noun",
+        "definition": "A thing characteristic of its kind or illustrating a general rule.",
+        "example": "This is a good example of modern architecture."
+      }
+    ],
+    "difficulty": 0,
+    "frequency": 1.0,
+    "addedDate": "2024-01-15T10:05:00.000Z",
+    "reviewCount": 0,
+    "passCount": 0
+  },
+  {
+    "id": "3",
+    "word": "memory",
+    "pronunciation": "/ˈmeməri/",
+    "meanings": [
+      {
+        "partOfSpeech": "noun",
+        "definition": "The faculty by which the mind stores and remembers information.",
+        "example": "She has an excellent memory for faces."
+      }
+    ],
+    "difficulty": 0,
+    "frequency": 1.0,
+    "addedDate": "2024-01-15T10:10:00.000Z",
+    "reviewCount": 0,
+    "passCount": 0
+  }
+]

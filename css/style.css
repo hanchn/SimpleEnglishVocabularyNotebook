@@ -6,6 +6,7 @@
   --background: #ffffff;
   --text-color: #333333;
   --border-color: #e0e0e0;
+  --card-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 /* 暗色模式 */
@@ -14,6 +15,7 @@
     --background: #121212;
     --text-color: #ffffff;
     --border-color: #333333;
+    --card-shadow: 0 2px 8px rgba(255, 255, 255, 0.1);
   }
 }
 
@@ -38,6 +40,262 @@ body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  padding: 20px;
+}
+
+/* 顶部状态栏 */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 20px;
+  background: var(--background);
+  border-bottom: 1px solid var(--border-color);
+  border-radius: 12px 12px 0 0;
+  box-shadow: var(--card-shadow);
+  margin-bottom: 20px;
+}
+
+.stats,
+.streak {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--secondary-color);
+}
+
+.stats span,
+.streak span {
+  color: var(--primary-color);
+  font-size: 16px;
+  font-weight: 700;
+}
+
+/* 模式切换导航 */
+.mode-nav {
+  display: flex;
+  background: var(--background);
+  border-radius: 12px;
+  padding: 8px;
+  margin-bottom: 20px;
+  box-shadow: var(--card-shadow);
+  border: 1px solid var(--border-color);
+}
+
+.mode-btn {
+  flex: 1;
+  padding: 12px 16px;
+  border: none;
+  background: transparent;
+  color: var(--secondary-color);
+  font-size: 14px;
+  font-weight: 500;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.mode-btn:hover {
+  background: rgba(76, 175, 80, 0.1);
+  color: var(--primary-color);
+}
+
+.mode-btn.active {
+  background: var(--primary-color);
+  color: white;
+  font-weight: 600;
+}
+
+/* 学习区域 */
+.learning-area {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: var(--background);
+  border-radius: 16px;
+  padding: 40px 20px;
+  margin-bottom: 20px;
+  box-shadow: var(--card-shadow);
+  border: 1px solid var(--border-color);
+  min-height: 300px;
+}
+
+/* 单词卡片 */
+.word-card {
+  text-align: center;
+  width: 100%;
+  max-width: 400px;
+}
+
+.word-text {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--text-color);
+  margin-bottom: 10px;
+  word-break: break-word;
+}
+
+.word-pronunciation {
+  font-size: 1.2rem;
+  color: var(--secondary-color);
+  margin-bottom: 20px;
+  font-style: italic;
+}
+
+.word-meaning {
+  font-size: 1rem;
+  color: var(--text-color);
+  line-height: 1.6;
+  margin-bottom: 15px;
+}
+
+.word-example {
+  font-size: 0.9rem;
+  color: var(--secondary-color);
+  font-style: italic;
+  padding: 15px;
+  background: rgba(76, 175, 80, 0.05);
+  border-radius: 8px;
+  border-left: 3px solid var(--primary-color);
+}
+
+/* 填空模式 */
+.fill-blank {
+  font-size: 2rem;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+
+.blank {
+  display: inline-block;
+  min-width: 100px;
+  height: 2px;
+  background: var(--primary-color);
+  margin: 0 5px;
+  vertical-align: baseline;
+}
+
+.fill-input {
+  font-size: 1.5rem;
+  padding: 10px 15px;
+  border: 2px solid var(--border-color);
+  border-radius: 8px;
+  background: var(--background);
+  color: var(--text-color);
+  text-align: center;
+  margin-top: 20px;
+  width: 200px;
+}
+
+.fill-input:focus {
+  outline: none;
+  border-color: var(--primary-color);
+}
+
+/* 操作按钮区域 */
+.controls {
+  display: flex;
+  gap: 12px;
+  padding: 20px;
+  background: var(--background);
+  border-radius: 0 0 12px 12px;
+  box-shadow: var(--card-shadow);
+  border: 1px solid var(--border-color);
+  border-top: none;
+}
+
+.btn {
+  flex: 1;
+  padding: 15px 20px;
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.btn:active {
+  transform: translateY(0);
+}
+
+.btn-success {
+  background: var(--primary-color);
+  color: white;
+}
+
+.btn-success:hover {
+  background: #45a049;
+}
+
+.btn-danger {
+  background: var(--danger-color);
+  color: white;
+}
+
+.btn-danger:hover {
+  background: #da190b;
+}
+
+.btn-secondary {
+  background: var(--secondary-color);
+  color: white;
+}
+
+.btn-secondary:hover {
+  background: #616161;
+}
+
+/* 音频播放按钮 */
+.audio-btn {
+  background: none;
+  border: none;
+  color: var(--primary-color);
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+  margin-left: 10px;
+}
+
+.audio-btn:hover {
+  background: rgba(76, 175, 80, 0.1);
+  transform: scale(1.1);
+}
+
+/* 加载状态 */
+.loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid var(--border-color);
+  border-top: 3px solid var(--primary-color);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 /* 响应式设计 */
@@ -45,4 +303,93 @@ body {
   #app {
     padding: 10px;
   }
+
+  .word-text {
+    font-size: 2rem;
+  }
+
+  .controls {
+    flex-direction: column;
+  }
+
+  .btn {
+    margin-bottom: 8px;
+  }
+
+  .mode-nav {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .mode-btn {
+    flex: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .word-text {
+    font-size: 1.8rem;
+  }
+
+  .learning-area {
+    padding: 20px 15px;
+    min-height: 250px;
+  }
+}
+
+/* 动画效果 */
+.fade-in {
+  animation: fadeIn 0.5s ease-in;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.slide-up {
+  animation: slideUp 0.3s ease-out;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* 添加错误消息样式 */
+.error-message {
+  text-align: center;
+  padding: 2rem;
+  color: var(--error-color);
+}
+
+.error-message p {
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
+}
+
+.retry-btn {
+  background: var(--primary-color);
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+.retry-btn:hover {
+  background: var(--primary-dark);
 }
