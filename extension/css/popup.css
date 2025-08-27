@@ -345,6 +345,7 @@ body::-webkit-scrollbar-thumb:hover {
 /* 填空练习模式样式 */
 .fill-exercise {
   text-align: center;
+  width: 100%;
 }
 
 .fill-exercise h3 {
@@ -353,39 +354,6 @@ body::-webkit-scrollbar-thumb:hover {
   font-size: 18px;
 }
 
-.word-blank {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-  margin-bottom: 12px;
-}
-
-.blank-line {
-  font-size: 24px;
-  font-weight: bold;
-  color: var(--primary-color);
-  letter-spacing: 4px;
-  border-bottom: 2px solid var(--primary-color);
-  padding: 8px 16px;
-  min-width: 120px;
-}
-
-.meaning-hint {
-  text-align: left;
-  margin-top: 16px;
-  padding: 12px;
-  background: #fef3c7;
-  border-radius: 8px;
-}
-
-.meaning-hint .definition {
-  margin-top: 8px;
-  font-style: italic;
-}
-
-/* 🎨 相关CSS样式 */
-```css
 /* 填空练习输入区域 */
 .word-input-area {
   display: flex;
@@ -404,11 +372,41 @@ body::-webkit-scrollbar-thumb:hover {
   min-width: 200px;
   outline: none;
   transition: border-color 0.2s;
+  background: white;
 }
 
 .word-input:focus {
   border-color: var(--primary-dark);
   box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+}
+
+/* 释义提示区域 */
+.meaning-hint {
+  text-align: left;
+  margin: 16px 0;
+  padding: 12px;
+  background: #fef3c7;
+  border-radius: 8px;
+  border-left: 4px solid var(--warning-color);
+}
+
+.meaning-hint .part-of-speech {
+  display: inline-block;
+  background: var(--primary-color);
+  color: white;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+}
+
+.meaning-hint .definition {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.5;
+  color: #92400e;
 }
 
 /* 填空控制按钮 */
@@ -421,12 +419,13 @@ body::-webkit-scrollbar-thumb:hover {
 
 .check-btn,
 .reveal-btn {
-  padding: 8px 16px;
+  padding: 10px 20px;
   border: none;
   border-radius: 6px;
-  font-size: 13px;
+  font-size: 14px;
+  font-weight: 500;
   cursor: pointer;
-  transition: background 0.2s;
+  transition: all 0.2s;
 }
 
 .check-btn {
@@ -436,6 +435,7 @@ body::-webkit-scrollbar-thumb:hover {
 
 .check-btn:hover {
   background: #059669;
+  transform: translateY(-1px);
 }
 
 .reveal-btn {
@@ -445,27 +445,41 @@ body::-webkit-scrollbar-thumb:hover {
 
 .reveal-btn:hover {
   background: #d97706;
+  transform: translateY(-1px);
 }
 
 /* 答案结果显示 */
 .answer-result {
   margin-top: 16px;
   text-align: center;
+  min-height: 24px;
 }
 
 .correct-answer {
   color: var(--success-color);
   font-weight: 500;
+  padding: 8px 12px;
+  background: rgba(16, 185, 129, 0.1);
+  border-radius: 6px;
+  border: 1px solid rgba(16, 185, 129, 0.2);
 }
 
 .wrong-answer {
   color: var(--danger-color);
   font-weight: 500;
+  padding: 8px 12px;
+  background: rgba(239, 68, 68, 0.1);
+  border-radius: 6px;
+  border: 1px solid rgba(239, 68, 68, 0.2);
 }
 
 .revealed-answer {
   color: var(--warning-color);
   font-weight: 500;
+  padding: 8px 12px;
+  background: rgba(245, 158, 11, 0.1);
+  border-radius: 6px;
+  border: 1px solid rgba(245, 158, 11, 0.2);
 }
 
 .result-icon {
@@ -474,5 +488,30 @@ body::-webkit-scrollbar-thumb:hover {
 }
 
 .result-text strong {
+  color: var(--primary-color);
+}
+
+/* 确保模式按钮样式正确 */
+.mode-btn {
+  flex: 1;
+  padding: 8px 12px;
+  border: none;
+  background: transparent;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  color: #6b7280;
+}
+
+.mode-btn.active {
+  background: var(--primary-color);
+  color: white;
+  font-weight: 600;
+}
+
+.mode-btn:hover:not(.active) {
+  background: #e5e7eb;
   color: var(--primary-color);
 }
