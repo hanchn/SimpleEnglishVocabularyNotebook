@@ -33,8 +33,48 @@ class VocabularyApp {
   // 加载统计数据
   loadStats() {
     const stats = this.storage.getStats();
-    document.getElementById('totalWords').textContent = stats.totalWords;
-    document.getElementById('streakDays').textContent = stats.streakDays;
+    if (stats) {
+      document.getElementById('totalWords').textContent = stats.totalWords || 0;
+      document.getElementById('streakDays').textContent = stats.streakDays || 0;
+    } else {
+      // 没有统计数据时显示空白或提示
+      document.getElementById('totalWords').textContent = '-';
+      document.getElementById('streakDays').textContent = '-';
+    }
+  }
+  
+  // 更新统计数据
+  updateStats(isCorrect) {
+    let stats = this.storage.getStats();
+    
+    // 如果没有统计数据，初始化
+    if (!stats) {
+      this.storage.initializeStats();
+      stats = this.storage.getStats();
+    }
+    
+    stats.totalReviews++;
+    
+    if (isCorrect) {
+      stats.correctAnswers++;
+    }
+    
+    stats.accuracy = Math.round((stats.correctAnswers / stats.totalReviews) * 100);
+    stats.totalWords = this.storage.getAllWords().length;
+    
+    // 更新连续天数
+    const today = new Date().toDateString();
+    if (stats.lastStudyDate !== today) {
+      if (stats.lastStudyDate === new Date(Date.now() - 86400000).toDateString()) {
+        stats.streakDays++;
+      } else {
+        stats.streakDays = 1;
+      }
+      stats.lastStudyDate = today;
+    }
+    
+    this.storage.updateStats(stats);
+    this.loadStats();
   }
   
   // 开始学习
@@ -79,16 +119,36 @@ class VocabularyApp {
   async getNextWord() {
     const words = this.storage.getAllWords();
     if (words.length === 0) {
-      const newWord = await this.api.getRandomWord();
-      // 添加数据验证
-      if (!newWord || !newWord.word || !newWord.meanings || newWord.meanings.length === 0) {
-        return this.api.getFallbackWord();
+      try {
+        return await this.api.getRandomWord();
+      } catch (error) {
+        console.error('获取新单词失败:', error);
+        throw new Error('无法获取单词数据，请检查网络连接');
       }
-      return newWord;
     }
     
     // 基于频次算法选择单词
     return this.selectWordByFrequency(words);
+  }
+  
+  // 开始学习
+  async startLearning() {
+    this.showLoading();
+    try {
+      await this.loadNextWord();
+    } catch (error) {
+      this.showError(error.message || '加载单词失败');
+    }
+  }
+  
+  // 加载下一个单词
+  async loadNextWord() {
+    try {
+      this.currentWord = await this.getNextWord();
+      this.displayWord();
+    } catch (error) {
+      this.showError(error.message || '加载单词失败');
+    }
   }
   
   // 显示单词 - 添加数据验证
@@ -281,33 +341,6 @@ class VocabularyApp {
     this.storage.saveWord(this.currentWord);
     
     this.loadNextWord();
-  }
-  
-  // 更新统计数据
-  updateStats(isCorrect) {
-    const stats = this.storage.getStats();
-    stats.totalReviews++;
-    
-    if (isCorrect) {
-      stats.correctAnswers++;
-    }
-    
-    stats.accuracy = Math.round((stats.correctAnswers / stats.totalReviews) * 100);
-    stats.totalWords = this.storage.getAllWords().length;
-    
-    // 更新连续天数
-    const today = new Date().toDateString();
-    if (stats.lastStudyDate !== today) {
-      if (stats.lastStudyDate === new Date(Date.now() - 86400000).toDateString()) {
-        stats.streakDays++;
-      } else {
-        stats.streakDays = 1;
-      }
-      stats.lastStudyDate = today;
-    }
-    
-    this.storage.updateStats(stats);
-    this.loadStats();
   }
 }
 

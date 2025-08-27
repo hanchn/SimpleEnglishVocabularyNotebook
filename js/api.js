@@ -1,39 +1,30 @@
 // API管理
 class APIManager {
   constructor() {
-    // 使用免费的Dictionary API（无需token）
+    // 使用Free Dictionary API
     this.DICT_API = 'https://api.dictionaryapi.dev/api/v2/entries/en';
-    // 备用单词列表（当API不可用时使用）
-    this.fallbackWordsList = [
-      'example', 'vocabulary', 'language', 'study', 'learn', 'practice',
-      'memory', 'knowledge', 'education', 'skill', 'ability', 'progress',
-      'achievement', 'success', 'challenge', 'opportunity', 'experience',
-      'development', 'improvement', 'understanding', 'communication'
+    // 常用英语单词列表用于随机选择
+    this.commonWords = [
+      'apple', 'book', 'cat', 'dog', 'elephant', 'friend', 'good', 'happy',
+      'important', 'journey', 'knowledge', 'love', 'music', 'nature', 'ocean',
+      'peace', 'question', 'river', 'smile', 'time', 'understand', 'voice',
+      'water', 'year', 'beautiful', 'create', 'develop', 'energy', 'future',
+      'growth', 'health', 'idea', 'learn', 'moment', 'opportunity', 'problem',
+      'quality', 'reason', 'success', 'technology', 'universe', 'value',
+      'wonder', 'experience', 'challenge', 'discover', 'explore', 'imagine',
+      'inspire', 'journey', 'knowledge', 'language', 'memory', 'practice'
     ];
   }
   
-  // 获取随机单词 - 改用本地单词列表
+  // 获取随机单词
   async getRandomWord() {
-    // 先尝试从本地单词列表获取
     const randomWord = this.getRandomWordFromList();
-    
-    try {
-      // 尝试获取详细信息
-      const wordDetails = await this.getWordDetails(randomWord);
-      if (wordDetails) {
-        return wordDetails;
-      }
-    } catch (error) {
-      console.log('API调用失败，使用备用数据:', error);
-    }
-    
-    // 如果API失败，返回备用单词
-    return this.getFallbackWord(randomWord);
+    return await this.getWordDetails(randomWord);
   }
   
   // 从单词列表中随机选择
   getRandomWordFromList() {
-    return this.fallbackWordsList[Math.floor(Math.random() * this.fallbackWordsList.length)];
+    return this.commonWords[Math.floor(Math.random() * this.commonWords.length)];
   }
   
   // 获取单词详情
@@ -49,15 +40,15 @@ class APIManager {
       }
       return this.parseWordData(data[0]);
     } catch (error) {
-      console.log('获取单词详情失败:', error);
-      return null;
+      console.error('获取单词详情失败:', error);
+      throw error; // 抛出错误，不提供备用数据
     }
   }
   
   // 解析单词数据
   parseWordData(data) {
     if (!data || !data.word) {
-      return null;
+      throw new Error('Invalid word data');
     }
     
     // 提取音标
@@ -65,97 +56,30 @@ class APIManager {
     if (data.phonetic) {
       pronunciation = data.phonetic;
     } else if (data.phonetics && data.phonetics.length > 0) {
-      pronunciation = data.phonetics.find(p => p.text)?.text || '';
+      // 优先选择有音频的音标，否则选择第一个有文本的音标
+      const phoneticWithAudio = data.phonetics.find(p => p.text && p.audio);
+      const phoneticWithText = data.phonetics.find(p => p.text);
+      pronunciation = (phoneticWithAudio || phoneticWithText)?.text || '';
     }
     
-    // 确保meanings数组存在且不为空
+    // 解析词义
     const meanings = data.meanings && data.meanings.length > 0 
       ? data.meanings.slice(0, 3).map(m => ({
           partOfSpeech: m.partOfSpeech || 'unknown',
-          definition: (m.definitions && m.definitions[0] && m.definitions[0].definition) || '暂无释义',
+          definition: (m.definitions && m.definitions[0] && m.definitions[0].definition) || '',
           example: (m.definitions && m.definitions[0] && m.definitions[0].example) || ''
-        }))
-      : [{
-          partOfSpeech: 'unknown',
-          definition: '暂无释义',
-          example: ''
-        }];
+        })).filter(m => m.definition) // 过滤掉没有定义的词义
+      : [];
+    
+    if (meanings.length === 0) {
+      throw new Error('No valid meanings found');
+    }
     
     return {
       id: Date.now().toString(),
       word: data.word,
       pronunciation: pronunciation,
       meanings: meanings,
-      difficulty: 0,
-      frequency: 1.0,
-      addedDate: new Date().toISOString(),
-      reviewCount: 0,
-      passCount: 0
-    };
-  }
-  
-  // 备用单词数据 - 扩展版本
-  getFallbackWord(word = null) {
-    const targetWord = word || this.getRandomWordFromList();
-    
-    // 预定义的单词数据
-    const predefinedWords = {
-      'example': {
-        pronunciation: '/ɪɡˈzæmpəl/',
-        meanings: [{
-          partOfSpeech: 'noun',
-          definition: 'A thing characteristic of its kind or illustrating a general rule.',
-          example: 'This is a good example of modern architecture.'
-        }]
-      },
-      'vocabulary': {
-        pronunciation: '/vəˈkæbjʊləri/',
-        meanings: [{
-          partOfSpeech: 'noun',
-          definition: 'The body of words used in a particular language.',
-          example: 'Reading helps expand your vocabulary.'
-        }]
-      },
-      'language': {
-        pronunciation: '/ˈlæŋɡwɪdʒ/',
-        meanings: [{
-          partOfSpeech: 'noun',
-          definition: 'The method of human communication using words.',
-          example: 'English is a global language.'
-        }]
-      },
-      'study': {
-        pronunciation: '/ˈstʌdi/',
-        meanings: [{
-          partOfSpeech: 'verb',
-          definition: 'To devote time and attention to acquiring knowledge.',
-          example: 'I study English every day.'
-        }]
-      },
-      'learn': {
-        pronunciation: '/lɜːrn/',
-        meanings: [{
-          partOfSpeech: 'verb',
-          definition: 'To acquire knowledge or skill through study or experience.',
-          example: 'Children learn quickly.'
-        }]
-      }
-    };
-    
-    const wordData = predefinedWords[targetWord] || {
-      pronunciation: '/unknown/',
-      meanings: [{
-        partOfSpeech: 'unknown',
-        definition: '暂无释义',
-        example: ''
-      }]
-    };
-    
-    return {
-      id: Date.now().toString(),
-      word: targetWord,
-      pronunciation: wordData.pronunciation,
-      meanings: wordData.meanings,
       difficulty: 0,
       frequency: 1.0,
       addedDate: new Date().toISOString(),
