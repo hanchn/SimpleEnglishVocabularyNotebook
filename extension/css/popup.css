@@ -325,3 +325,61 @@ body {
 .retry-btn:hover {
   background: var(--primary-dark);
 }
+
+/* 快速背诵模式样式 */
+.quick-hint {
+  text-align: center;
+  margin-top: 20px;
+  padding: 16px;
+  background: #f0f9ff;
+  border-radius: 8px;
+  border-left: 4px solid var(--primary-color);
+}
+
+.quick-hint p {
+  color: #1e40af;
+  font-size: 14px;
+  margin: 0;
+}
+
+/* 填空练习模式样式 */
+.fill-exercise {
+  text-align: center;
+}
+
+.fill-exercise h3 {
+  color: var(--primary-color);
+  margin-bottom: 16px;
+  font-size: 18px;
+}
+
+.word-blank {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.blank-line {
+  font-size: 24px;
+  font-weight: bold;
+  color: var(--primary-color);
+  letter-spacing: 4px;
+  border-bottom: 2px solid var(--primary-color);
+  padding: 8px 16px;
+  min-width: 120px;
+}
+
+.meaning-hint {
+  text-align: left;
+  margin-top: 16px;
+  padding: 12px;
+  background: #fef3c7;
+  border-radius: 8px;
+}
+
+.meaning-hint .definition {
+  margin-top: 8px;
+  font-style: italic;
+}

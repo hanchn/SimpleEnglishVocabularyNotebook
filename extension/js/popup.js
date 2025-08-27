@@ -54,6 +54,92 @@ class VocabularyExtension {
     document.querySelectorAll('.mode-btn').forEach(btn => {
       btn.classList.toggle('active', btn.dataset.mode === mode);
     });
+    // 重新显示当前单词以应用新模式
+    if (this.currentWord) {
+      this.displayWord();
+    }
+  }
+
+  displayWord() {
+    const learningArea = document.getElementById('learningArea');
+    if (!this.currentWord) return;
+
+    let wordHtml = '';
+    
+    switch (this.currentMode) {
+      case 'quick':
+        // 快速背诵模式：只显示单词和音标
+        wordHtml = `
+          <div class="word-card">
+            <div class="word-header">
+              <h2 class="word-text">${this.currentWord.word}</h2>
+              <button class="audio-btn" onclick="app.playAudio()">
+                🔊
+              </button>
+            </div>
+            <div class="word-pronunciation">${this.currentWord.pronunciation}</div>
+            <div class="quick-hint">
+              <p>💡 想想这个单词的意思，然后点击下方按钮</p>
+            </div>
+          </div>
+        `;
+        break;
+        
+      case 'fill':
+        // 填空练习模式：显示定义，隐藏单词
+        const firstMeaning = this.currentWord.meanings[0];
+        wordHtml = `
+          <div class="word-card">
+            <div class="fill-exercise">
+              <h3>填空练习</h3>
+              <div class="word-blank">
+                <span class="blank-line">_ _ _ _ _ _</span>
+                <button class="audio-btn" onclick="app.playAudio()">
+                  🔊
+                </button>
+              </div>
+              <div class="word-pronunciation">${this.currentWord.pronunciation}</div>
+              <div class="meaning-hint">
+                <span class="part-of-speech">${firstMeaning.partOfSpeech}</span>
+                <p class="definition">${firstMeaning.definition}</p>
+              </div>
+            </div>
+          </div>
+        `;
+        break;
+        
+      case 'example':
+        // 例句学习模式：显示完整信息
+        wordHtml = `
+          <div class="word-card">
+            <div class="word-header">
+              <h2 class="word-text">${this.currentWord.word}</h2>
+              <button class="audio-btn" onclick="app.playAudio()">
+                🔊
+              </button>
+            </div>
+            <div class="word-pronunciation">${this.currentWord.pronunciation}</div>
+            <div class="word-meanings">
+              ${this.currentWord.meanings.map(m => `
+                <div class="meaning-item">
+                  <span class="part-of-speech">${m.partOfSpeech}</span>
+                  <p class="definition">${m.definition}</p>
+                  ${m.example ? `<p class="example">📝 例句: ${m.example}</p>` : ''}
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        `;
+        break;
+        
+      default:
+        // 默认显示快速模式
+        this.currentMode = 'quick';
+        this.displayWord();
+        return;
+    }
+    
+    learningArea.innerHTML = wordHtml;
   }
 
   async startLearning() {
@@ -74,34 +160,6 @@ class VocabularyExtension {
     } catch (error) {
       this.showError('获取单词失败，请检查网络连接');
     }
-  }
-
-  displayWord() {
-    const learningArea = document.getElementById('learningArea');
-    if (!this.currentWord) return;
-
-    const wordHtml = `
-      <div class="word-card">
-        <div class="word-header">
-          <h2 class="word-text">${this.currentWord.word}</h2>
-          <button class="audio-btn" onclick="app.playAudio()">
-            🔊
-          </button>
-        </div>
-        <div class="word-pronunciation">${this.currentWord.pronunciation}</div>
-        <div class="word-meanings">
-          ${this.currentWord.meanings.map(m => `
-            <div class="meaning-item">
-              <span class="part-of-speech">${m.partOfSpeech}</span>
-              <p class="definition">${m.definition}</p>
-              ${m.example ? `<p class="example">例句: ${m.example}</p>` : ''}
-            </div>
-          `).join('')}
-        </div>
-      </div>
-    `;
-    
-    learningArea.innerHTML = wordHtml;
   }
 
   playAudio() {
@@ -139,13 +197,37 @@ class VocabularyExtension {
     document.getElementById('learningArea').innerHTML = '<div class="loading">加载中...</div>';
   }
 
+  // 在VocabularyExtension类中改进showError方法
   showError(message) {
     document.getElementById('learningArea').innerHTML = `
       <div class="error-message">
-        <p>${message}</p>
-        <button class="retry-btn" onclick="app.nextWord()">重试</button>
+        <p>⚠️ ${message}</p>
+        <div class="error-actions">
+          <button class="retry-btn" onclick="app.nextWord()">重试</button>
+          <button class="offline-btn" onclick="app.useOfflineMode()">离线模式</button>
+        </div>
       </div>
     `;
+  }
+  
+  // 添加离线模式
+  useOfflineMode() {
+    this.currentWord = {
+      id: Date.now().toString(),
+      word: 'example',
+      pronunciation: '/ɪɡˈzæmpəl/',
+      meanings: [{
+        partOfSpeech: 'noun',
+        definition: 'a thing characteristic of its kind or illustrating a general rule',
+        example: 'This is an example sentence.'
+      }],
+      difficulty: 0,
+      frequency: 1.0,
+      addedDate: new Date().toISOString(),
+      reviewCount: 0,
+      passCount: 0
+    };
+    this.displayWord();
   }
 }
 
