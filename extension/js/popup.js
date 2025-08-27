@@ -86,14 +86,19 @@ class VocabularyExtension {
         break;
         
       case 'fill':
-        // 填空练习模式：显示定义，隐藏单词
+        // 填空练习模式：显示定义，用户输入单词
         const firstMeaning = this.currentWord.meanings[0];
         wordHtml = `
           <div class="word-card">
             <div class="fill-exercise">
-              <h3>填空练习</h3>
-              <div class="word-blank">
-                <span class="blank-line">_ _ _ _ _ _</span>
+              <h3>🖊️ 填空练习</h3>
+              <div class="word-input-area">
+                <input type="text" 
+                       id="wordInput" 
+                       class="word-input" 
+                       placeholder="请输入单词..."
+                       autocomplete="off"
+                       spellcheck="false">
                 <button class="audio-btn" onclick="app.playAudio()">
                   🔊
                 </button>
@@ -103,9 +108,27 @@ class VocabularyExtension {
                 <span class="part-of-speech">${firstMeaning.partOfSpeech}</span>
                 <p class="definition">${firstMeaning.definition}</p>
               </div>
+              <div class="fill-controls">
+                <button class="check-btn" onclick="app.checkAnswer()">检查答案</button>
+                <button class="reveal-btn" onclick="app.revealAnswer()">显示答案</button>
+              </div>
+              <div id="answerResult" class="answer-result"></div>
             </div>
           </div>
         `;
+        // 设置输入框焦点
+        setTimeout(() => {
+          const input = document.getElementById('wordInput');
+          if (input) {
+            input.focus();
+            // 添加回车键检查答案
+            input.addEventListener('keypress', (e) => {
+              if (e.key === 'Enter') {
+                this.checkAnswer();
+              }
+            });
+          }
+        }, 100);
         break;
         
       case 'example':
@@ -228,6 +251,61 @@ class VocabularyExtension {
       passCount: 0
     };
     this.displayWord();
+  }
+  
+  // 检查填空答案
+  checkAnswer() {
+    const input = document.getElementById('wordInput');
+    const resultDiv = document.getElementById('answerResult');
+    
+    if (!input || !resultDiv || !this.currentWord) return;
+    
+    const userAnswer = input.value.trim().toLowerCase();
+    const correctAnswer = this.currentWord.word.toLowerCase();
+    
+    if (userAnswer === correctAnswer) {
+      resultDiv.innerHTML = `
+        <div class="correct-answer">
+          <span class="result-icon">✅</span>
+          <span class="result-text">正确！单词是: <strong>${this.currentWord.word}</strong></span>
+        </div>
+      `;
+      // 自动进入下一个单词
+      setTimeout(() => {
+        this.markWord(true);
+      }, 2000);
+    } else {
+      resultDiv.innerHTML = `
+        <div class="wrong-answer">
+          <span class="result-icon">❌</span>
+          <span class="result-text">不正确，再试试看！</span>
+        </div>
+      `;
+      // 清空输入框让用户重试
+      input.value = '';
+      input.focus();
+    }
+  }
+  
+  // 显示答案
+  revealAnswer() {
+    const input = document.getElementById('wordInput');
+    const resultDiv = document.getElementById('answerResult');
+    
+    if (!input || !resultDiv || !this.currentWord) return;
+    
+    input.value = this.currentWord.word;
+    resultDiv.innerHTML = `
+      <div class="revealed-answer">
+        <span class="result-icon">💡</span>
+        <span class="result-text">答案是: <strong>${this.currentWord.word}</strong></span>
+      </div>
+    `;
+    
+    // 3秒后自动进入下一个单词
+    setTimeout(() => {
+      this.markWord(false); // 标记为不认识
+    }, 3000);
   }
 }
 

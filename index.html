@@ -18,17 +18,22 @@
       <!-- 模式切换 -->
       <nav class="mode-nav">
         <button class="mode-btn active" data-mode="quick">快速背诵</button>
-        <button class="mode-btn" data-mode="fill">填写模式</button>
+        <button class="mode-btn" data-mode="fill">填空练习</button>
         <button class="mode-btn" data-mode="example">例句学习</button>
       </nav>
 
       <!-- 学习区域 -->
       <main class="learning-area" id="learningArea">
-        <!-- 动态内容区域 -->
+        <!-- 欢迎消息 -->
+        <div class="welcome-message">
+          <h2>🎯 开始你的英语学习之旅</h2>
+          <p>选择学习模式，点击开始学习按钮</p>
+          <button id="startBtn" class="btn btn-primary">开始学习</button>
+        </div>
       </main>
 
       <!-- 操作按钮 -->
-      <footer class="controls">
+      <footer class="controls" id="controls" style="display: none;">
         <button id="knowBtn" class="btn btn-success">认识</button>
         <button id="unknownBtn" class="btn btn-danger">不认识</button>
         <button id="passBtn" class="btn btn-secondary">Pass</button>

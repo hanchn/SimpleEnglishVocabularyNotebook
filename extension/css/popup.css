@@ -383,3 +383,96 @@ body {
   margin-top: 8px;
   font-style: italic;
 }
+
+/* 🎨 相关CSS样式 */
+```css
+/* 填空练习输入区域 */
+.word-input-area {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.word-input {
+  font-size: 18px;
+  padding: 12px 16px;
+  border: 2px solid var(--primary-color);
+  border-radius: 8px;
+  text-align: center;
+  min-width: 200px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.word-input:focus {
+  border-color: var(--primary-dark);
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+}
+
+/* 填空控制按钮 */
+.fill-controls {
+  display: flex;
+  gap: 8px;
+  margin-top: 16px;
+  justify-content: center;
+}
+
+.check-btn,
+.reveal-btn {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.check-btn {
+  background: var(--success-color);
+  color: white;
+}
+
+.check-btn:hover {
+  background: #059669;
+}
+
+.reveal-btn {
+  background: var(--warning-color);
+  color: white;
+}
+
+.reveal-btn:hover {
+  background: #d97706;
+}
+
+/* 答案结果显示 */
+.answer-result {
+  margin-top: 16px;
+  text-align: center;
+}
+
+.correct-answer {
+  color: var(--success-color);
+  font-weight: 500;
+}
+
+.wrong-answer {
+  color: var(--danger-color);
+  font-weight: 500;
+}
+
+.revealed-answer {
+  color: var(--warning-color);
+  font-weight: 500;
+}
+
+.result-icon {
+  font-size: 18px;
+  margin-right: 8px;
+}
+
+.result-text strong {
+  color: var(--primary-color);
+}

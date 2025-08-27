@@ -368,28 +368,202 @@ body {
   }
 }
 
-/* 添加错误消息样式 */
+/* 欢迎消息样式 */
+.welcome-message {
+  text-align: center;
+  padding: 2rem;
+}
+
+.welcome-message h2 {
+  font-size: 1.8rem;
+  margin-bottom: 1rem;
+  color: var(--text-color);
+}
+
+.welcome-message p {
+  font-size: 1rem;
+  color: var(--secondary-color);
+  margin-bottom: 2rem;
+}
+
+.btn-primary {
+  background: var(--primary-color);
+  color: white;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+  background: #45a049;
+  transform: translateY(-2px);
+}
+
+/* 填空练习模式样式 */
+.fill-exercise {
+  text-align: center;
+  width: 100%;
+}
+
+.fill-exercise h3 {
+  font-size: 1.5rem;
+  margin-bottom: 1.5rem;
+  color: var(--text-color);
+}
+
+.word-input-area {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 1rem;
+}
+
+.word-input {
+  font-size: 1.2rem;
+  padding: 10px 15px;
+  border: 2px solid var(--border-color);
+  border-radius: 8px;
+  background: var(--background);
+  color: var(--text-color);
+  text-align: center;
+  min-width: 200px;
+}
+
+.word-input:focus {
+  outline: none;
+  border-color: var(--primary-color);
+}
+
+.meaning-hint {
+  margin: 1rem 0;
+  padding: 1rem;
+  background: rgba(76, 175, 80, 0.05);
+  border-radius: 8px;
+  border-left: 3px solid var(--primary-color);
+}
+
+.part-of-speech {
+  font-weight: 600;
+  color: var(--primary-color);
+  text-transform: uppercase;
+  font-size: 0.9rem;
+}
+
+.definition {
+  margin-top: 0.5rem;
+  font-size: 1rem;
+  color: var(--text-color);
+}
+
+.fill-controls {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 1.5rem;
+}
+
+.check-btn,
+.reveal-btn {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.check-btn {
+  background: var(--primary-color);
+  color: white;
+}
+
+.check-btn:hover {
+  background: #45a049;
+}
+
+.reveal-btn {
+  background: var(--secondary-color);
+  color: white;
+}
+
+.reveal-btn:hover {
+  background: #616161;
+}
+
+/* 答案结果样式 */
+.answer-result {
+  margin-top: 1rem;
+  padding: 0.5rem;
+  border-radius: 6px;
+  font-weight: 500;
+}
+
+.correct-answer {
+  background: rgba(76, 175, 80, 0.1);
+  color: var(--primary-color);
+  border: 1px solid rgba(76, 175, 80, 0.3);
+}
+
+.wrong-answer {
+  background: rgba(244, 67, 54, 0.1);
+  color: var(--danger-color);
+  border: 1px solid rgba(244, 67, 54, 0.3);
+}
+
+.revealed-answer {
+  background: rgba(117, 117, 117, 0.1);
+  color: var(--secondary-color);
+  border: 1px solid rgba(117, 117, 117, 0.3);
+}
+
+.result-icon {
+  margin-right: 0.5rem;
+}
+
+/* 错误消息改进 */
 .error-message {
   text-align: center;
   padding: 2rem;
-  color: var(--error-color);
 }
 
 .error-message p {
   font-size: 1.1rem;
   margin-bottom: 1rem;
+  color: var(--danger-color);
 }
 
-.retry-btn {
+.error-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+
+.retry-btn,
+.offline-btn {
   background: var(--primary-color);
   color: white;
   border: none;
-  padding: 0.5rem 1rem;
-  border-radius: 4px;
+  padding: 8px 16px;
+  border-radius: 6px;
   cursor: pointer;
-  font-size: 1rem;
+  font-size: 14px;
+  transition: all 0.3s ease;
+}
+
+.offline-btn {
+  background: var(--secondary-color);
 }
 
 .retry-btn:hover {
-  background: var(--primary-dark);
+  background: #45a049;
+}
+
+.offline-btn:hover {
+  background: #616161;
 }
