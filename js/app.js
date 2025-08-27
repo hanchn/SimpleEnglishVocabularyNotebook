@@ -16,6 +16,7 @@ class VocabularyApp {
   }
   
   // 事件绑定
+  // 在bindEvents方法中添加
   bindEvents() {
     // 模式切换
     document.querySelectorAll('.mode-btn').forEach(btn => {
@@ -28,6 +29,16 @@ class VocabularyApp {
     document.getElementById('knowBtn').addEventListener('click', () => this.markWord('know'));
     document.getElementById('unknownBtn').addEventListener('click', () => this.markWord('unknown'));
     document.getElementById('passBtn').addEventListener('click', () => this.passWord());
+    
+    // 开始学习按钮
+    const startBtn = document.getElementById('startBtn');
+    if (startBtn) {
+      startBtn.addEventListener('click', () => {
+        document.querySelector('.welcome-message').style.display = 'none';
+        document.getElementById('controls').style.display = 'flex';
+        this.startLearning();
+      });
+    }
   }
   
   // 加载统计数据
@@ -211,25 +222,49 @@ class VocabularyApp {
   }
   
   // 填空模式 - 添加安全访问
+  // 更新displayFillMode方法
   displayFillMode() {
     const learningArea = document.getElementById('learningArea');
     const word = this.currentWord.word;
     const blankedWord = this.createBlankedWord(word);
     const pronunciation = this.currentWord.pronunciation || '[暂无音标]';
+    const firstMeaning = this.currentWord.meanings[0];
     
     learningArea.innerHTML = `
       <div class="word-card fade-in">
-        <div class="fill-blank">${blankedWord}</div>
-        <input type="text" class="fill-input" placeholder="填入单词" 
-               onkeypress="if(event.key==='Enter') app.checkFillAnswer(this.value)">
-        <div class="word-pronunciation">
-          ${pronunciation}
-          <button class="audio-btn" onclick="app.playAudio('${this.currentWord.word}')">
-            🔊
-          </button>
+        <div class="fill-exercise">
+          <h3>🖊️ 填空练习</h3>
+          <div class="word-input-area">
+            <input type="text" 
+                   id="wordInput" 
+                   class="word-input fill-input" 
+                   placeholder="请输入单词..."
+                   autocomplete="off"
+                   spellcheck="false"
+                   onkeypress="if(event.key==='Enter') app.checkFillAnswer(this.value)">
+            <button class="audio-btn" onclick="app.playAudio('${this.currentWord.word}')">
+              🔊
+            </button>
+          </div>
+          <div class="word-pronunciation">${pronunciation}</div>
+          <div class="meaning-hint">
+            <span class="part-of-speech">${firstMeaning.partOfSpeech}</span>
+            <p class="definition">${firstMeaning.definition}</p>
+          </div>
+          <div class="fill-controls">
+            <button class="check-btn" onclick="app.checkFillAnswer(document.getElementById('wordInput').value)">检查答案</button>
+            <button class="reveal-btn" onclick="app.revealFillAnswer()">显示答案</button>
+          </div>
+          <div class="answer-result"></div>
         </div>
       </div>
     `;
+    
+    // 设置输入框焦点
+    setTimeout(() => {
+      const input = document.getElementById('wordInput');
+      if (input) input.focus();
+    }, 100);
   }
   
   // 例句学习模式 - 添加安全访问
@@ -294,13 +329,65 @@ class VocabularyApp {
     ).join('');
   }
   
+  // 在VocabularyApp类中添加缺失的方法
+  
+  // 基于频次的单词选择算法
+  selectWordByFrequency(words) {
+    // 根据难度和复习次数计算权重
+    const weightedWords = words.map(word => ({
+      ...word,
+      weight: (word.difficulty + 1) * (1 / (word.reviewCount + 1))
+    }));
+    
+    // 按权重排序，选择权重最高的
+    weightedWords.sort((a, b) => b.weight - a.weight);
+    return weightedWords[0];
+  }
+  
   // 检查填空答案
   checkFillAnswer(answer) {
-    if (answer.toLowerCase() === this.currentWord.word.toLowerCase()) {
-      this.markWord('know');
+    const resultDiv = document.querySelector('.answer-result') || this.createAnswerResultDiv();
+    
+    if (answer.toLowerCase().trim() === this.currentWord.word.toLowerCase()) {
+      resultDiv.innerHTML = `
+        <div class="correct-answer">
+          <span class="result-icon">✅</span>
+          <span class="result-text">正确！单词是: <strong>${this.currentWord.word}</strong></span>
+        </div>
+      `;
+      setTimeout(() => this.markWord('know'), 2000);
     } else {
-      this.markWord('unknown');
+      resultDiv.innerHTML = `
+        <div class="wrong-answer">
+          <span class="result-icon">❌</span>
+          <span class="result-text">不正确，再试试看！</span>
+        </div>
+      `;
     }
+  }
+  
+  // 显示答案
+  revealFillAnswer() {
+    const input = document.querySelector('.fill-input');
+    const resultDiv = document.querySelector('.answer-result') || this.createAnswerResultDiv();
+    
+    if (input) input.value = this.currentWord.word;
+    resultDiv.innerHTML = `
+      <div class="revealed-answer">
+        <span class="result-icon">💡</span>
+        <span class="result-text">答案是: <strong>${this.currentWord.word}</strong></span>
+      </div>
+    `;
+    
+    setTimeout(() => this.markWord('unknown'), 3000);
+  }
+  
+  // 创建答案结果显示区域
+  createAnswerResultDiv() {
+    const resultDiv = document.createElement('div');
+    resultDiv.className = 'answer-result';
+    document.querySelector('.word-card').appendChild(resultDiv);
+    return resultDiv;
   }
   
   // 播放音频
