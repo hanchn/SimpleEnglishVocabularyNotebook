@@ -7,6 +7,7 @@
     "storage",
     "activeTab"
   ],
+  "author": "HanChn",
   "host_permissions": [
     "https://api.dictionaryapi.dev/*"
   ],
