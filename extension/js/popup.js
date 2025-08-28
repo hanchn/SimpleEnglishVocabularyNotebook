@@ -351,12 +351,15 @@ displayQuickMode() {
            style="max-width: 280px; max-height: 150px; border-radius: 6px; margin: 8px 0;">
     </div>` : '';
 
+  const meaning = this.currentWord.meanings && this.currentWord.meanings[0] ? 
+    this.currentWord.meanings[0] : { partOfSpeech: '未知', definition: '暂无释义' };
+
   return `
     <div class="word-display">
       <div class="word-text">${this.currentWord.word}</div>
       <div class="word-pronunciation">
         ${this.currentWord.pronunciation || '[暂无音标]'}
-        <button class="audio-btn" onclick="ext.playAudio('${this.currentWord.word}')">
+        <button class="audio-btn" onclick="app.playAudio('${this.currentWord.word}')">
           🔊
         </button>
       </div>
