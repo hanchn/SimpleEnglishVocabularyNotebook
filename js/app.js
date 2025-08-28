@@ -1,35 +1,115 @@
 class VocabularyApp {
     constructor() {
-        this.wordHistory = [];
         this.currentIndex = -1;
+        this.wordHistory = [];
         this.isLoading = false;
-        this.init();
+        this.tooltip = null;
     }
 
     init() {
         this.bindEvents();
-        this.updateNavigationButtons();
-        // 初始化图片显示状态
         this.updateImageVisibility(window.apiManager.getMode());
+        this.initTooltip();
+    }
+
+    // 初始化气泡功能
+    initTooltip() {
+        this.tooltip = document.getElementById('tooltip');
+        const wordText = document.getElementById('wordText');
+        
+        if (wordText && this.tooltip) {
+            wordText.addEventListener('mouseenter', (e) => this.showTooltip(e));
+            wordText.addEventListener('mouseleave', () => this.hideTooltip());
+            wordText.addEventListener('mousemove', (e) => this.updateTooltipPosition(e));
+        }
+    }
+
+    // 显示气泡
+    showTooltip(event) {
+        const wordData = this.getCurrentWordData();
+        if (!wordData || !wordData.chinese) {
+            return;
+        }
+
+        const tooltipContent = this.tooltip.querySelector('.tooltip-content');
+        tooltipContent.textContent = wordData.chinese;
+        
+        this.updateTooltipPosition(event);
+        this.tooltip.style.display = 'block';
+        
+        // 使用setTimeout确保display设置后再添加show类
+        setTimeout(() => {
+            this.tooltip.classList.add('show');
+        }, 10);
+    }
+
+    // 隐藏气泡
+    hideTooltip() {
+        if (this.tooltip) {
+            this.tooltip.classList.remove('show');
+            setTimeout(() => {
+                this.tooltip.style.display = 'none';
+            }, 300);
+        }
+    }
+
+    // 更新气泡位置
+    updateTooltipPosition(event) {
+        if (!this.tooltip) return;
+        
+        const rect = event.target.getBoundingClientRect();
+        const tooltipRect = this.tooltip.getBoundingClientRect();
+        
+        let left = rect.left + (rect.width / 2) - (tooltipRect.width / 2);
+        let top = rect.top - tooltipRect.height - 10;
+        
+        // 确保气泡不超出屏幕边界
+        const padding = 10;
+        if (left < padding) {
+            left = padding;
+        } else if (left + tooltipRect.width > window.innerWidth - padding) {
+            left = window.innerWidth - tooltipRect.width - padding;
+        }
+        
+        if (top < padding) {
+            top = rect.bottom + 10;
+            // 调整箭头方向
+            this.tooltip.classList.add('tooltip-bottom');
+        } else {
+            this.tooltip.classList.remove('tooltip-bottom');
+        }
+        
+        this.tooltip.style.left = left + 'px';
+        this.tooltip.style.top = top + 'px';
+    }
+
+    // 获取当前单词数据
+    getCurrentWordData() {
+        if (this.currentIndex >= 0 && this.currentIndex < this.wordHistory.length) {
+            return this.wordHistory[this.currentIndex];
+        }
+        return null;
     }
 
     bindEvents() {
         // 模式切换
         const modeToggle = document.getElementById('modeToggle');
-        modeToggle.addEventListener('change', (e) => {
-            const mode = e.target.checked ? 'online' : 'local';
-            window.apiManager.setMode(mode);
-            this.updateImageVisibility(mode);
-            
-            // 如果当前有显示的单词，重新显示以更新图片状态
-            if (this.currentIndex >= 0 && this.wordHistory[this.currentIndex]) {
-                this.displayWord(this.wordHistory[this.currentIndex]);
-            }
-        });
+        if (modeToggle) {
+            modeToggle.addEventListener('change', (e) => {
+                const mode = e.target.checked ? 'online' : 'local';
+                window.apiManager.setMode(mode);
+                this.updateImageVisibility(mode);
+            });
+        }
 
         // 开始学习按钮
         document.getElementById('startBtn').addEventListener('click', () => {
             this.startLearning();
+        });
+
+        // 发音按钮
+        document.getElementById('pronounceBtn').addEventListener('click', () => {
+            this.pronounceWord();
         });
 
         // 导航按钮
@@ -40,44 +120,34 @@ class VocabularyApp {
         document.getElementById('nextBtn').addEventListener('click', () => {
             this.showNextWord();
         });
-
-        // 发音按钮
-        document.getElementById('pronounceBtn').addEventListener('click', () => {
-            this.pronounceWord();
-        });
     }
 
     // 更新图片显示状态
     updateImageVisibility(mode) {
         const imageContainer = document.getElementById('wordImageContainer');
-        // 本地模式始终隐藏图片容器
-        if (mode === 'local') {
-            imageContainer.style.display = 'none';
+        if (imageContainer) {
+            imageContainer.style.display = mode === 'local' ? 'none' : 'block';
         }
-        // 在线模式根据是否有图片决定是否显示
     }
 
     // 开始学习
     async startLearning() {
+        await window.apiManager.loadLocalWords();
+        await this.loadNextWord();
         document.getElementById('startContainer').style.display = 'none';
         document.getElementById('controls').style.display = 'block';
-        
-        await this.loadNextWord();
     }
 
     // 加载下一个单词
     async loadNextWord() {
-        if (this.isLoading) return;
-        
-        this.showLoading(true);
-        
         try {
+            this.showLoading(true);
             const wordData = await window.apiManager.getRandomWord();
             this.addWordToHistory(wordData);
             this.displayWord(wordData);
             this.updateNavigationButtons();
         } catch (error) {
-            this.showError(`加载单词失败: ${error.message}`);
+            this.showError(error.message);
         } finally {
             this.showLoading(false);
         }
@@ -87,8 +157,7 @@ class VocabularyApp {
     showPreviousWord() {
         if (this.currentIndex > 0) {
             this.currentIndex--;
-            const wordData = this.wordHistory[this.currentIndex];
-            this.displayWord(wordData);
+            this.displayWord(this.wordHistory[this.currentIndex]);
             this.updateNavigationButtons();
         }
     }
@@ -97,12 +166,11 @@ class VocabularyApp {
     async showNextWord() {
         if (this.currentIndex < this.wordHistory.length - 1) {
             this.currentIndex++;
-            const wordData = this.wordHistory[this.currentIndex];
-            this.displayWord(wordData);
-            this.updateNavigationButtons();
+            this.displayWord(this.wordHistory[this.currentIndex]);
         } else {
             await this.loadNextWord();
         }
+        this.updateNavigationButtons();
     }
 
     // 添加单词到历史记录
@@ -216,4 +284,5 @@ class VocabularyApp {
 // 初始化应用
 document.addEventListener('DOMContentLoaded', () => {
     window.vocabularyApp = new VocabularyApp();
+    window.vocabularyApp.init();
 });

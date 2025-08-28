@@ -49,7 +49,7 @@ body {
   position: relative;
   width: 50px;
   height: 24px;
-  background-color: #4CAF50;
+  background-color: #4caf50;
   border-radius: 24px;
   transition: background-color 0.3s;
 }
@@ -64,11 +64,11 @@ body {
   top: 2px;
   left: 2px;
   transition: transform 0.3s;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .mode-switch input:checked + .slider {
-  background-color: #2196F3;
+  background-color: #2196f3;
 }
 
 .mode-switch input:checked + .slider:before {
@@ -390,5 +390,78 @@ main {
   .nav-btn {
     width: 100%;
     max-width: 200px;
+  }
+}
+
+/* 在现有样式基础上添加以下样式 */
+
+/* 单词悬停效果 */
+.word-text {
+  cursor: pointer;
+  transition: color 0.2s ease;
+  position: relative;
+}
+
+.word-text:hover {
+  color: #007bff;
+}
+
+/* 中文翻译气泡样式 */
+.tooltip {
+  position: fixed;
+  z-index: 1000;
+  background: rgba(0, 0, 0, 0.9);
+  color: white;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 14px;
+  max-width: 200px;
+  word-wrap: break-word;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  opacity: 0;
+  transform: translateY(-5px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  pointer-events: none;
+}
+
+.tooltip.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.tooltip-content {
+  line-height: 1.4;
+}
+
+.tooltip-arrow {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-top: 6px solid rgba(0, 0, 0, 0.9);
+}
+
+.tooltip.tooltip-bottom .tooltip-arrow {
+  top: -6px;
+  border-top: none;
+  border-bottom: 6px solid rgba(0, 0, 0, 0.9);
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .tooltip {
+    font-size: 12px;
+    padding: 6px 10px;
+    max-width: 150px;
+  }
+
+  .tooltip-arrow {
+    border-left-width: 5px;
+    border-right-width: 5px;
+    border-top-width: 5px;
   }
 }
