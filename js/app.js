@@ -120,7 +120,17 @@ class VocabularyApp {
             const meaning = wordData.meanings[0];
             document.getElementById('partOfSpeech').textContent = meaning.partOfSpeech;
             document.getElementById('definition').textContent = meaning.definition;
-            document.getElementById('exampleSentence').textContent = meaning.example || '暂无例句';
+            
+            // 例句处理：只有存在例句时才显示，否则隐藏例句区域
+            const exampleContainer = document.querySelector('.word-example');
+            const exampleSentence = document.getElementById('exampleSentence');
+            
+            if (meaning.example && meaning.example.trim()) {
+                exampleSentence.textContent = meaning.example;
+                exampleContainer.style.display = 'block';
+            } else {
+                exampleContainer.style.display = 'none';
+            }
         }
         
         // 处理图片显示
@@ -142,12 +152,16 @@ class VocabularyApp {
         
         // 在线模式且有图片URL时尝试加载图片
         if (wordData.imageUrl) {
+            // 先隐藏图片容器，加载成功后再显示
+            imageContainer.style.display = 'none';
+            
             wordImage.onload = () => {
+                console.log('图片加载成功');
                 imageContainer.style.display = 'block';
             };
             
             wordImage.onerror = () => {
-                console.log('图片加载失败，隐藏图片容器');
+                console.log('图片加载失败，保持隐藏状态');
                 imageContainer.style.display = 'none';
             };
             

@@ -147,7 +147,7 @@ class APIManager {
         if (!Array.isArray(data) || data.length === 0) {
             throw new Error('API返回数据格式错误');
         }
-
+    
         const entry = data[0];
         const word = entry.word || requestedWord;
         
@@ -157,26 +157,32 @@ class APIManager {
             const phoneticEntry = entry.phonetics.find(p => p.text) || entry.phonetics[0];
             phonetic = phoneticEntry.text || '';
         }
-
+    
         // 获取词义
         const meanings = [];
         if (entry.meanings && entry.meanings.length > 0) {
             entry.meanings.forEach(meaning => {
                 if (meaning.definitions && meaning.definitions.length > 0) {
                     const definition = meaning.definitions[0];
-                    meanings.push({
+                    const meaningObj = {
                         partOfSpeech: meaning.partOfSpeech || 'unknown',
-                        definition: definition.definition || '暂无定义',
-                        example: definition.example || '暂无例句'
-                    });
+                        definition: definition.definition || '暂无定义'
+                    };
+                    
+                    // 只有当例句存在且不为空时才添加例句字段
+                    if (definition.example && definition.example.trim()) {
+                        meaningObj.example = definition.example;
+                    }
+                    
+                    meanings.push(meaningObj);
                 }
             });
         }
-
+    
         if (meanings.length === 0) {
             throw new Error('未找到有效的词义信息');
         }
-
+    
         return {
             word,
             phonetic,
