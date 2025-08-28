@@ -49,5 +49,294 @@
     "addedDate": "2024-01-15T10:10:00.000Z",
     "reviewCount": 0,
     "passCount": 0
+  },
+  {
+    "id": "4",
+    "word": "knowledge",
+    "pronunciation": "/ˈnɒlɪdʒ/",
+    "meanings": [
+      {
+        "partOfSpeech": "noun",
+        "definition": "Facts, information, and skills acquired through experience or education.",
+        "example": "His knowledge of history is impressive."
+      }
+    ],
+    "difficulty": 0,
+    "frequency": 1.0,
+    "addedDate": "2024-01-15T10:15:00.000Z",
+    "reviewCount": 0,
+    "passCount": 0
+  },
+  {
+    "id": "5",
+    "word": "education",
+    "pronunciation": "/ˌedʒʊˈkeɪʃən/",
+    "meanings": [
+      {
+        "partOfSpeech": "noun",
+        "definition": "The process of receiving or giving systematic instruction.",
+        "example": "Education is the key to success."
+      }
+    ],
+    "difficulty": 0,
+    "frequency": 1.0,
+    "addedDate": "2024-01-15T10:20:00.000Z",
+    "reviewCount": 0,
+    "passCount": 0
+  },
+  {
+    "id": "6",
+    "word": "important",
+    "pronunciation": "/ɪmˈpɔːtənt/",
+    "meanings": [
+      {
+        "partOfSpeech": "adjective",
+        "definition": "Of great significance or value.",
+        "example": "It's important to eat healthy food."
+      }
+    ],
+    "difficulty": 0,
+    "frequency": 1.0,
+    "addedDate": "2024-01-15T10:25:00.000Z",
+    "reviewCount": 0,
+    "passCount": 0
+  },
+  {
+    "id": "7",
+    "word": "beautiful",
+    "pronunciation": "/ˈbjuːtɪfəl/",
+    "meanings": [
+      {
+        "partOfSpeech": "adjective",
+        "definition": "Pleasing the senses or mind aesthetically.",
+        "example": "The sunset was absolutely beautiful."
+      }
+    ],
+    "difficulty": 0,
+    "frequency": 1.0,
+    "addedDate": "2024-01-15T10:30:00.000Z",
+    "reviewCount": 0,
+    "passCount": 0
+  },
+  {
+    "id": "8",
+    "word": "different",
+    "pronunciation": "/ˈdɪfərənt/",
+    "meanings": [
+      {
+        "partOfSpeech": "adjective",
+        "definition": "Not the same as another or each other; unlike in nature.",
+        "example": "Everyone has different opinions."
+      }
+    ],
+    "difficulty": 0,
+    "frequency": 1.0,
+    "addedDate": "2024-01-15T10:35:00.000Z",
+    "reviewCount": 0,
+    "passCount": 0
+  },
+  {
+    "id": "9",
+    "word": "understand",
+    "pronunciation": "/ˌʌndəˈstænd/",
+    "meanings": [
+      {
+        "partOfSpeech": "verb",
+        "definition": "Perceive the intended meaning of words or actions.",
+        "example": "I understand what you're trying to say."
+      }
+    ],
+    "difficulty": 0,
+    "frequency": 1.0,
+    "addedDate": "2024-01-15T10:40:00.000Z",
+    "reviewCount": 0,
+    "passCount": 0
+  },
+  {
+    "id": "10",
+    "word": "experience",
+    "pronunciation": "/ɪkˈspɪəriəns/",
+    "meanings": [
+      {
+        "partOfSpeech": "noun",
+        "definition": "Practical contact with and observation of facts or events.",
+        "example": "She has years of experience in teaching."
+      }
+    ],
+    "difficulty": 0,
+    "frequency": 1.0,
+    "addedDate": "2024-01-15T10:45:00.000Z",
+    "reviewCount": 0,
+    "passCount": 0
+  },
+  {
+    "id": "11",
+    "word": "opportunity",
+    "pronunciation": "/ˌɒpəˈtjuːnɪti/",
+    "meanings": [
+      {
+        "partOfSpeech": "noun",
+        "definition": "A set of circumstances that makes it possible to do something.",
+        "example": "This job offers great opportunities for advancement."
+      }
+    ],
+    "difficulty": 0,
+    "frequency": 1.0,
+    "addedDate": "2024-01-15T10:50:00.000Z",
+    "reviewCount": 0,
+    "passCount": 0
+  },
+  {
+    "id": "12",
+    "word": "challenge",
+    "pronunciation": "/ˈtʃælɪndʒ/",
+    "meanings": [
+      {
+        "partOfSpeech": "noun",
+        "definition": "A task or situation that tests someone's abilities.",
+        "example": "Learning a new language is always a challenge."
+      }
+    ],
+    "difficulty": 0,
+    "frequency": 1.0,
+    "addedDate": "2024-01-15T10:55:00.000Z",
+    "reviewCount": 0,
+    "passCount": 0
+  },
+  {
+    "id": "13",
+    "word": "success",
+    "pronunciation": "/səkˈses/",
+    "meanings": [
+      {
+        "partOfSpeech": "noun",
+        "definition": "The accomplishment of an aim or purpose.",
+        "example": "Hard work is the key to success."
+      }
+    ],
+    "difficulty": 0,
+    "frequency": 1.0,
+    "addedDate": "2024-01-15T11:00:00.000Z",
+    "reviewCount": 0,
+    "passCount": 0
+  },
+  {
+    "id": "14",
+    "word": "creative",
+    "pronunciation": "/kriˈeɪtɪv/",
+    "meanings": [
+      {
+        "partOfSpeech": "adjective",
+        "definition": "Relating to or involving the imagination or original ideas.",
+        "example": "She has a very creative approach to problem-solving."
+      }
+    ],
+    "difficulty": 0,
+    "frequency": 1.0,
+    "addedDate": "2024-01-15T11:05:00.000Z",
+    "reviewCount": 0,
+    "passCount": 0
+  },
+  {
+    "id": "15",
+    "word": "technology",
+    "pronunciation": "/tekˈnɒlədʒi/",
+    "meanings": [
+      {
+        "partOfSpeech": "noun",
+        "definition": "The application of scientific knowledge for practical purposes.",
+        "example": "Technology has changed the way we communicate."
+      }
+    ],
+    "difficulty": 0,
+    "frequency": 1.0,
+    "addedDate": "2024-01-15T11:10:00.000Z",
+    "reviewCount": 0,
+    "passCount": 0
+  },
+  {
+    "id": "16",
+    "word": "communication",
+    "pronunciation": "/kəˌmjuːnɪˈkeɪʃən/",
+    "meanings": [
+      {
+        "partOfSpeech": "noun",
+        "definition": "The imparting or exchanging of information or ideas.",
+        "example": "Good communication is essential in any relationship."
+      }
+    ],
+    "difficulty": 0,
+    "frequency": 1.0,
+    "addedDate": "2024-01-15T11:15:00.000Z",
+    "reviewCount": 0,
+    "passCount": 0
+  },
+  {
+    "id": "17",
+    "word": "environment",
+    "pronunciation": "/ɪnˈvaɪrənmənt/",
+    "meanings": [
+      {
+        "partOfSpeech": "noun",
+        "definition": "The surroundings or conditions in which a person, animal, or plant lives.",
+        "example": "We must protect our environment for future generations."
+      }
+    ],
+    "difficulty": 0,
+    "frequency": 1.0,
+    "addedDate": "2024-01-15T11:20:00.000Z",
+    "reviewCount": 0,
+    "passCount": 0
+  },
+  {
+    "id": "18",
+    "word": "development",
+    "pronunciation": "/dɪˈveləpmənt/",
+    "meanings": [
+      {
+        "partOfSpeech": "noun",
+        "definition": "The process of developing or being developed.",
+        "example": "The development of new technologies takes time."
+      }
+    ],
+    "difficulty": 0,
+    "frequency": 1.0,
+    "addedDate": "2024-01-15T11:25:00.000Z",
+    "reviewCount": 0,
+    "passCount": 0
+  },
+  {
+    "id": "19",
+    "word": "relationship",
+    "pronunciation": "/rɪˈleɪʃənʃɪp/",
+    "meanings": [
+      {
+        "partOfSpeech": "noun",
+        "definition": "The way in which two or more people or things are connected.",
+        "example": "They have a strong relationship built on trust."
+      }
+    ],
+    "difficulty": 0,
+    "frequency": 1.0,
+    "addedDate": "2024-01-15T11:30:00.000Z",
+    "reviewCount": 0,
+    "passCount": 0
+  },
+  {
+    "id": "20",
+    "word": "responsibility",
+    "pronunciation": "/rɪˌspɒnsəˈbɪləti/",
+    "meanings": [
+      {
+        "partOfSpeech": "noun",
+        "definition": "The state or fact of having a duty to deal with something.",
+        "example": "Taking care of pets is a big responsibility."
+      }
+    ],
+    "difficulty": 0,
+    "frequency": 1.0,
+    "addedDate": "2024-01-15T11:35:00.000Z",
+    "reviewCount": 0,
+    "passCount": 0
   }
 ]

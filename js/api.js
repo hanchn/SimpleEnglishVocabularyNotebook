@@ -1,115 +1,206 @@
-// API管理
 class APIManager {
-  constructor() {
-    // 使用Free Dictionary API
-    this.DICT_API = 'https://api.dictionaryapi.dev/api/v2/entries/en';
-    // 常用英语单词列表用于随机选择
-    this.commonWords = [
-      'apple', 'book', 'cat', 'dog', 'elephant', 'friend', 'good', 'happy',
-      'important', 'journey', 'knowledge', 'love', 'music', 'nature', 'ocean',
-      'peace', 'question', 'river', 'smile', 'time', 'understand', 'voice',
-      'water', 'year', 'beautiful', 'create', 'develop', 'energy', 'future',
-      'growth', 'health', 'idea', 'learn', 'moment', 'opportunity', 'problem',
-      'quality', 'reason', 'success', 'technology', 'universe', 'value',
-      'wonder', 'experience', 'challenge', 'discover', 'explore', 'imagine',
-      'inspire', 'journey', 'knowledge', 'language', 'memory', 'practice'
-    ];
-  }
-  
-  // 获取随机单词
-  async getRandomWord() {
-    const randomWord = this.getRandomWordFromList();
-    return await this.getWordDetails(randomWord);
-  }
-  
-  // 从单词列表中随机选择
-  getRandomWordFromList() {
-    return this.commonWords[Math.floor(Math.random() * this.commonWords.length)];
-  }
-  
-  // 获取单词详情
-  async getWordDetails(word) {
-    try {
-      const response = await fetch(`${this.DICT_API}/${word}`);
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      const data = await response.json();
-      if (!data || data.length === 0) {
-        throw new Error('No word data found');
-      }
-      return this.parseWordData(data[0]);
-    } catch (error) {
-      console.error('获取单词详情失败:', error);
-      throw error; // 抛出错误，不提供备用数据
+    constructor() {
+        this.mode = 'local'; // 默认本地模式
+        this.localWords = [];
+        this.currentLocalIndex = 0;
+        this.loadLocalWords();
     }
-  }
-  
-  // 解析单词数据
-  parseWordData(data) {
-    if (!data || !data.word) {
-      throw new Error('Invalid word data');
+
+    // 设置模式（local 或 online）
+    setMode(mode) {
+        this.mode = mode;
+        console.log(`切换到${mode === 'local' ? '本地' : '在线'}模式`);
     }
-    
-    // 提取音标
-    let pronunciation = '';
-    if (data.phonetic) {
-      pronunciation = data.phonetic;
-    } else if (data.phonetics && data.phonetics.length > 0) {
-      // 优先选择有音频的音标，否则选择第一个有文本的音标
-      const phoneticWithAudio = data.phonetics.find(p => p.text && p.audio);
-      const phoneticWithText = data.phonetics.find(p => p.text);
-      pronunciation = (phoneticWithAudio || phoneticWithText)?.text || '';
+
+    // 获取当前模式
+    getMode() {
+        return this.mode;
     }
-    
-    // 解析词义
-    const meanings = data.meanings && data.meanings.length > 0 
-      ? data.meanings.slice(0, 3).map(m => ({
-          partOfSpeech: m.partOfSpeech || 'unknown',
-          definition: (m.definitions && m.definitions[0] && m.definitions[0].definition) || '',
-          example: (m.definitions && m.definitions[0] && m.definitions[0].example) || ''
-        })).filter(m => m.definition) // 过滤掉没有定义的词义
-      : [];
-    
-    if (meanings.length === 0) {
-      throw new Error('No valid meanings found');
+
+    // 加载本地词库
+    async loadLocalWords() {
+        try {
+            const response = await fetch('./data/words.json');
+            if (!response.ok) {
+                throw new Error('无法加载本地词库');
+            }
+            this.localWords = await response.json();
+            console.log(`本地词库加载成功，共${this.localWords.length}个单词`);
+        } catch (error) {
+            console.error('加载本地词库失败:', error);
+            // 提供备用数据
+            this.localWords = [
+                {
+                    id: "1",
+                    word: "vocabulary",
+                    pronunciation: "/vəˈkæbjʊləri/",
+                    meanings: [{
+                        partOfSpeech: "noun",
+                        definition: "The body of words used in a particular language.",
+                        example: "Reading helps expand your vocabulary."
+                    }]
+                }
+            ];
+        }
     }
-    
-    return {
-      id: Date.now().toString(),
-      word: data.word,
-      pronunciation: pronunciation,
-      meanings: meanings,
-      difficulty: 0,
-      frequency: 1.0,
-      addedDate: new Date().toISOString(),
-      reviewCount: 0,
-      passCount: 0
-    };
-  }
-  
-  async getWordImage(word) {
-    try {
-      const searchTerm = encodeURIComponent(word);
-      
-      // 方案1: 使用Unsplash免费API（更相关的图片）
-      const unsplashUrl = `https://source.unsplash.com/300x200/?${searchTerm}`;
-      
-      // 方案2: 使用Pixabay免费API（需要注册但免费）
-      // const pixabayUrl = `https://pixabay.com/api/?key=YOUR_KEY&q=${searchTerm}&image_type=photo&per_page=3`;
-      
-      return {
-        url: unsplashUrl,
-        alt: `Image related to ${word}`,
-        fallback: `https://via.placeholder.com/300x200/4CAF50/white?text=${searchTerm}`
-      };
-    } catch (error) {
-      console.error('获取图片失败:', error);
-      return {
-        url: `https://via.placeholder.com/300x200/4CAF50/white?text=${encodeURIComponent(word)}`,
-        alt: `Placeholder for ${word}`,
-        fallback: null
-      };
+
+    // 获取随机单词（根据模式）
+    async getRandomWord() {
+        if (this.mode === 'local') {
+            return this.getRandomLocalWord();
+        } else {
+            return this.getRandomOnlineWord();
+        }
     }
-  }
+
+    // 获取本地随机单词
+    getRandomLocalWord() {
+        if (this.localWords.length === 0) {
+            throw new Error('本地词库为空');
+        }
+        
+        const randomIndex = Math.floor(Math.random() * this.localWords.length);
+        const word = this.localWords[randomIndex];
+        
+        return {
+            word: word.word,
+            phonetic: word.pronunciation,
+            meanings: word.meanings.map(meaning => ({
+                partOfSpeech: meaning.partOfSpeech,
+                definition: meaning.definition,
+                example: meaning.example
+            })),
+            // 本地模式不提供图片
+            imageUrl: null
+        };
+    }
+
+    // 获取在线随机单词
+    async getRandomOnlineWord() {
+        const words = [
+            'apple', 'banana', 'computer', 'education', 'freedom',
+            'happiness', 'knowledge', 'language', 'mountain', 'ocean',
+            'philosophy', 'question', 'rainbow', 'science', 'technology',
+            'universe', 'victory', 'wisdom', 'xenial', 'yesterday', 'zealous'
+        ];
+        
+        const randomWord = words[Math.floor(Math.random() * words.length)];
+        return this.getWordDetails(randomWord);
+    }
+
+    // 获取单词详情（在线模式）
+    async getWordDetails(word) {
+        if (this.mode === 'local') {
+            // 本地模式下搜索本地词库
+            const localWord = this.localWords.find(w => w.word.toLowerCase() === word.toLowerCase());
+            if (localWord) {
+                return {
+                    word: localWord.word,
+                    phonetic: localWord.pronunciation,
+                    meanings: localWord.meanings.map(meaning => ({
+                        partOfSpeech: meaning.partOfSpeech,
+                        definition: meaning.definition,
+                        example: meaning.example
+                    })),
+                    imageUrl: null
+                };
+            } else {
+                throw new Error('本地词库中未找到该单词');
+            }
+        }
+
+        try {
+            console.log(`正在获取单词: ${word}`);
+            
+            const response = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${word}`, {
+                method: 'GET',
+                headers: {
+                    'Accept': 'application/json'
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error(`API请求失败: ${response.status}`);
+            }
+
+            const data = await response.json();
+            const wordData = this.parseWordData(data, word);
+            
+            // 在线模式获取图片
+            const imageUrl = await this.getWordImage(word);
+            wordData.imageUrl = imageUrl;
+            
+            return wordData;
+        } catch (error) {
+            console.error('获取单词详情失败:', error);
+            throw new Error(`无法获取单词 "${word}" 的详情: ${error.message}`);
+        }
+    }
+
+    // 解析单词数据
+    parseWordData(data, requestedWord) {
+        if (!Array.isArray(data) || data.length === 0) {
+            throw new Error('API返回数据格式错误');
+        }
+
+        const entry = data[0];
+        const word = entry.word || requestedWord;
+        
+        // 获取音标
+        let phonetic = '';
+        if (entry.phonetics && entry.phonetics.length > 0) {
+            const phoneticEntry = entry.phonetics.find(p => p.text) || entry.phonetics[0];
+            phonetic = phoneticEntry.text || '';
+        }
+
+        // 获取词义
+        const meanings = [];
+        if (entry.meanings && entry.meanings.length > 0) {
+            entry.meanings.forEach(meaning => {
+                if (meaning.definitions && meaning.definitions.length > 0) {
+                    const definition = meaning.definitions[0];
+                    meanings.push({
+                        partOfSpeech: meaning.partOfSpeech || 'unknown',
+                        definition: definition.definition || '暂无定义',
+                        example: definition.example || '暂无例句'
+                    });
+                }
+            });
+        }
+
+        if (meanings.length === 0) {
+            throw new Error('未找到有效的词义信息');
+        }
+
+        return {
+            word,
+            phonetic,
+            meanings
+        };
+    }
+
+    // 获取单词图片（仅在线模式）
+    async getWordImage(word) {
+        if (this.mode === 'local') {
+            return null;
+        }
+
+        try {
+            const response = await fetch(`https://api.unsplash.com/search/photos?query=${encodeURIComponent(word)}&per_page=1&client_id=your-unsplash-access-key`);
+            
+            if (response.ok) {
+                const data = await response.json();
+                if (data.results && data.results.length > 0) {
+                    return data.results[0].urls.small;
+                }
+            }
+        } catch (error) {
+            console.log('获取图片失败，使用默认图片:', error.message);
+        }
+        
+        return `https://via.placeholder.com/300x200/4CAF50/white?text=${encodeURIComponent(word)}`;
+    }
 }
+
+// 创建全局实例
+window.apiManager = new APIManager();

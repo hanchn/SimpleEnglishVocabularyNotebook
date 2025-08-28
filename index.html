@@ -1,99 +1,86 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>简单英语单词本</title>
-    <link rel="stylesheet" href="css/style.css" />
-  </head>
-  <body>
-    <div class="app">
-      <!-- 顶部状态栏 -->
-      <header class="status-bar">
-        <div class="app-title">📚 简单英语单词本</div>
-      </header>
-
-      <!-- 主要内容区域 -->
-      <main class="learning-area">
-        <!-- 欢迎消息 -->
-        <div class="welcome-message" id="welcomeMessage">
-          <h2>🎯 开始学习英语单词</h2>
-          <p>点击下方按钮开始你的单词学习之旅</p>
-          <button class="btn btn-primary btn-large" id="startBtn">
-            开始学习
-          </button>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- 模式切换控件 -->
+        <div class="mode-switch-container">
+            <label class="mode-switch">
+                <span class="mode-label">本地模式</span>
+                <input type="checkbox" id="modeToggle">
+                <span class="slider"></span>
+                <span class="mode-label">在线模式</span>
+            </label>
         </div>
 
-        <!-- 单词卡片 -->
-        <div class="word-card" id="wordCard" style="display: none">
-          <!-- 单词主体 -->
-          <div class="word-header">
-            <h1 class="word-text" id="wordText">Loading...</h1>
-            <div class="word-pronunciation-container">
-              <span class="word-pronunciation" id="wordPronunciation"></span>
-              <button class="btn btn-audio" id="playWordBtn" title="播放发音">
-                🔊
-              </button>
+        <header>
+            <h1>📚 简单英语单词本</h1>
+            <p>提升你的英语词汇量</p>
+        </header>
+
+        <main>
+            <!-- 开始学习按钮 -->
+            <div class="start-container" id="startContainer">
+                <button id="startBtn" class="start-btn">开始学习</button>
             </div>
-          </div>
 
-          <!-- 单词图片 -->
-          <div class="word-image-container">
-            <img class="word-image" id="wordImage" src="" alt="单词图片" />
-          </div>
+            <!-- 单词卡片 -->
+            <div class="word-card" id="wordCard" style="display: none;">
+                <!-- 单词内容 -->
+                <div class="word-content">
+                    <div class="word-main">
+                        <h2 class="word-text" id="wordText">单词</h2>
+                        <div class="word-phonetic">
+                            <span id="wordPhonetic">/音标/</span>
+                            <button id="pronounceBtn" class="pronounce-btn" title="发音">🔊</button>
+                        </div>
+                    </div>
+                    
+                    <!-- 单词图片（仅在线模式显示） -->
+                    <div class="word-image" id="wordImageContainer" style="display: none;">
+                        <img id="wordImage" src="" alt="单词图片">
+                    </div>
+                    
+                    <div class="word-meanings">
+                        <div class="meaning" id="wordMeaning">
+                            <span class="part-of-speech" id="partOfSpeech">词性</span>
+                            <p class="definition" id="definition">定义</p>
+                        </div>
+                    </div>
+                    
+                    <div class="word-example">
+                        <h4>例句：</h4>
+                        <p id="exampleSentence">例句内容</p>
+                    </div>
+                </div>
+            </div>
 
-          <!-- 单词释义 -->
-          <div class="word-meaning" id="wordMeaning">
-            <div class="part-of-speech" id="partOfSpeech">-</div>
-            <div class="definition" id="definition">正在加载...</div>
-          </div>
+            <!-- 错误消息 -->
+            <div class="error-message" id="errorMessage" style="display: none;"></div>
+            
+            <!-- 加载状态 -->
+            <div class="loading" id="loading" style="display: none;">
+                <div class="spinner"></div>
+                <p>正在加载单词...</p>
+            </div>
+        </main>
 
-          <!-- 例句 -->
-          <div class="word-example" id="wordExample">
-            <div class="example-label">例句:</div>
-            <div class="example-text" id="exampleText">正在加载例句...</div>
-            <button
-              class="btn btn-audio btn-small"
-              id="playExampleBtn"
-              title="播放例句"
-            >
-              🔊 例句发音
-            </button>
-          </div>
+        <!-- 底部控制区域 -->
+        <div class="controls" id="controls" style="display: none;">
+            <div class="navigation">
+                <button id="prevBtn" class="nav-btn" disabled>⬅️ 上一个</button>
+                <button id="nextBtn" class="nav-btn">下一个 ➡️</button>
+            </div>
         </div>
-
-        <!-- 错误消息 -->
-        <div class="error-message" id="errorMessage" style="display: none">
-          <h3>⚠️ 出错了</h3>
-          <p id="errorText">发生了未知错误</p>
-          <button class="btn btn-primary" id="retryBtn">重新开始</button>
-        </div>
-
-        <!-- 加载状态 -->
-        <div class="loading" id="loadingMessage" style="display: none">
-          <div class="spinner"></div>
-          <p>正在加载单词...</p>
-        </div>
-      </main>
-
-      <!-- 导航控制 -->
-      <footer class="controls" id="controls" style="display: none">
-        <div class="word-navigation">
-          <button id="prevBtn" class="btn btn-nav" title="上一个单词">
-            ⬅️ 上一个
-          </button>
-          <span class="word-counter" id="wordCounter">1/1</span>
-          <button id="nextBtn" class="btn btn-nav" title="下一个单词">
-            下一个 ➡️
-          </button>
-        </div>
-      </footer>
     </div>
 
-    <!-- 脚本加载 -->
-    <script src="js/storage.js"></script>
     <script src="js/api.js"></script>
     <script src="js/audio.js"></script>
     <script src="js/app.js"></script>
-  </body>
+</body>
 </html>
