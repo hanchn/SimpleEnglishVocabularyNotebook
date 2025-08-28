@@ -186,13 +186,14 @@ class VocabularyApp {
     displayWord(wordData) {
         if (!wordData) return;
         
-        // 基本信息
+        // 基本信息 - 网页中只显示英文单词
         const wordElement = document.getElementById('wordText');
         wordElement.textContent = wordData.word;
         
-        // 添加中文翻译到title属性
+        // 将中文翻译存储在data属性中，供打印时使用
         if (wordData.chinese) {
-            wordElement.title = wordData.chinese;
+            wordElement.setAttribute('data-chinese', wordData.chinese);
+            wordElement.title = wordData.chinese; // 保留悬停提示
         }
         
         // 修复：将 'phonetic' 改为 'wordPhonetic'
@@ -331,6 +332,62 @@ class VocabularyApp {
     async playExampleAudio(audioFile, sentence) {
         if (window.audioManager) {
             await window.audioManager.speakSentence(sentence, audioFile);
+        }
+    }
+
+    // 导出图片功能
+    async exportAsImage() {
+        try {
+            const wordCard = document.getElementById('wordCard');
+            const controls = document.getElementById('controls');
+            
+            if (!wordCard) {
+                alert('没有找到单词卡片');
+                return;
+            }
+
+            // 检查html2canvas是否加载
+            if (typeof html2canvas === 'undefined') {
+                alert('图片导出库未加载，请刷新页面重试');
+                return;
+            }
+
+            // 临时隐藏控制按钮
+            const originalDisplay = controls ? controls.style.display : '';
+            if (controls) {
+                controls.style.display = 'none';
+            }
+
+            // 生成图片
+            const canvas = await html2canvas(wordCard, {
+                backgroundColor: '#ffffff',
+                scale: 2, // 提高图片质量
+                useCORS: true,
+                allowTaint: true,
+                width: wordCard.offsetWidth,
+                height: wordCard.offsetHeight
+            });
+
+            // 恢复控制按钮显示
+            if (controls) {
+                controls.style.display = originalDisplay;
+            }
+
+            // 创建下载链接
+            const link = document.createElement('a');
+            const currentWord = document.getElementById('wordText').textContent || 'vocabulary';
+            link.download = `${currentWord}-vocabulary-card.png`;
+            link.href = canvas.toDataURL('image/png');
+            
+            // 触发下载
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            
+            console.log('图片导出成功');
+        } catch (error) {
+            console.error('导出图片失败:', error);
+            alert('导出图片失败，请重试');
         }
     }
 

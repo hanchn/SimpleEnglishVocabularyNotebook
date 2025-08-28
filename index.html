@@ -81,6 +81,13 @@
           >
             打印卡片
           </button>
+          <button
+            id="exportBtn"
+            class="nav-btn export-btn"
+            onclick="window.vocabularyApp.exportAsImage()"
+          >
+            导出图片
+          </button>
         </div>
       </div>
     </div>
@@ -91,6 +98,8 @@
       <div class="tooltip-arrow"></div>
     </div>
 
+    <!-- 添加html2canvas库 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="js/api.js"></script>
     <script src="js/audio.js"></script>
     <script src="js/app.js"></script>
