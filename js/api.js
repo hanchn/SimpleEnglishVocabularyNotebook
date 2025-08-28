@@ -81,7 +81,7 @@ class APIManager {
             'apple', 'banana', 'computer', 'education', 'freedom',
             'happiness', 'knowledge', 'language', 'mountain', 'ocean',
             'philosophy', 'question', 'rainbow', 'science', 'technology',
-            'universe', 'victory', 'wisdom', 'xenial', 'yesterday', 'zealous'
+            'universe', 'victory', 'wisdom', 'yesterday', 'zealous'
         ];
         
         const randomWord = words[Math.floor(Math.random() * words.length)];
@@ -126,9 +126,14 @@ class APIManager {
             const data = await response.json();
             const wordData = this.parseWordData(data, word);
             
-            // 在线模式获取图片
-            const imageUrl = await this.getWordImage(word);
-            wordData.imageUrl = imageUrl;
+            // 在线模式尝试获取图片，但不强制要求
+            try {
+                const imageUrl = await this.getWordImage(word);
+                wordData.imageUrl = imageUrl;
+            } catch (imageError) {
+                console.log('图片获取失败，不显示图片:', imageError.message);
+                wordData.imageUrl = null;
+            }
             
             return wordData;
         } catch (error) {
@@ -179,26 +184,28 @@ class APIManager {
         };
     }
 
-    // 获取单词图片（仅在线模式）
+    // 获取单词图片（仅在线模式，使用免费服务）
     async getWordImage(word) {
         if (this.mode === 'local') {
             return null;
         }
 
+        // 使用免费的图片服务，不依赖API key
         try {
-            const response = await fetch(`https://api.unsplash.com/search/photos?query=${encodeURIComponent(word)}&per_page=1&client_id=your-unsplash-access-key`);
+            // 尝试使用 Pixabay 的免费API（需要注册获取key）或使用占位图片服务
+            const imageUrl = `https://source.unsplash.com/300x200/?${encodeURIComponent(word)}`;
             
-            if (response.ok) {
-                const data = await response.json();
-                if (data.results && data.results.length > 0) {
-                    return data.results[0].urls.small;
-                }
+            // 测试图片是否可以加载
+            const testResponse = await fetch(imageUrl, { method: 'HEAD' });
+            if (testResponse.ok) {
+                return imageUrl;
             }
         } catch (error) {
-            console.log('获取图片失败，使用默认图片:', error.message);
+            console.log('Unsplash图片获取失败:', error.message);
         }
         
-        return `https://via.placeholder.com/300x200/4CAF50/white?text=${encodeURIComponent(word)}`;
+        // 如果获取失败，返回null而不是占位图片
+        return null;
     }
 }
 

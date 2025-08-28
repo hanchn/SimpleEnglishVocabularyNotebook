@@ -9,6 +9,8 @@ class VocabularyApp {
     init() {
         this.bindEvents();
         this.updateNavigationButtons();
+        // 初始化图片显示状态
+        this.updateImageVisibility(window.apiManager.getMode());
     }
 
     bindEvents() {
@@ -18,6 +20,11 @@ class VocabularyApp {
             const mode = e.target.checked ? 'online' : 'local';
             window.apiManager.setMode(mode);
             this.updateImageVisibility(mode);
+            
+            // 如果当前有显示的单词，重新显示以更新图片状态
+            if (this.currentIndex >= 0 && this.wordHistory[this.currentIndex]) {
+                this.displayWord(this.wordHistory[this.currentIndex]);
+            }
         });
 
         // 开始学习按钮
@@ -43,11 +50,11 @@ class VocabularyApp {
     // 更新图片显示状态
     updateImageVisibility(mode) {
         const imageContainer = document.getElementById('wordImageContainer');
+        // 本地模式始终隐藏图片容器
         if (mode === 'local') {
             imageContainer.style.display = 'none';
-        } else {
-            imageContainer.style.display = 'block';
         }
+        // 在线模式根据是否有图片决定是否显示
     }
 
     // 开始学习
@@ -117,18 +124,36 @@ class VocabularyApp {
         }
         
         // 处理图片显示
+        this.handleImageDisplay(wordData);
+        
+        document.getElementById('wordCard').style.display = 'block';
+    }
+
+    // 处理图片显示逻辑
+    handleImageDisplay(wordData) {
         const imageContainer = document.getElementById('wordImageContainer');
         const wordImage = document.getElementById('wordImage');
         
-        if (wordData.imageUrl && window.apiManager.getMode() === 'online') {
-            wordImage.src = wordData.imageUrl;
-            wordImage.alt = `${wordData.word} 的图片`;
-            imageContainer.style.display = 'block';
-        } else {
+        // 本地模式或没有图片URL时隐藏图片
+        if (window.apiManager.getMode() === 'local' || !wordData.imageUrl) {
             imageContainer.style.display = 'none';
+            return;
         }
         
-        document.getElementById('wordCard').style.display = 'block';
+        // 在线模式且有图片URL时尝试加载图片
+        if (wordData.imageUrl) {
+            wordImage.onload = () => {
+                imageContainer.style.display = 'block';
+            };
+            
+            wordImage.onerror = () => {
+                console.log('图片加载失败，隐藏图片容器');
+                imageContainer.style.display = 'none';
+            };
+            
+            wordImage.src = wordData.imageUrl;
+            wordImage.alt = `${wordData.word} 的图片`;
+        }
     }
 
     // 更新导航按钮状态
@@ -145,6 +170,13 @@ class VocabularyApp {
         const word = document.getElementById('wordText').textContent;
         if (word && window.audioManager) {
             window.audioManager.speak(word);
+        } else {
+            // 如果没有audioManager，使用浏览器内置的语音合成
+            if ('speechSynthesis' in window) {
+                const utterance = new SpeechSynthesisUtterance(word);
+                utterance.lang = 'en-US';
+                speechSynthesis.speak(utterance);
+            }
         }
     }
 
