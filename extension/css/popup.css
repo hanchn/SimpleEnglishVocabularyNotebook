@@ -1,221 +1,214 @@
-:root {
-  --primary-color: #4f46e5;
-  --primary-dark: #3730a3;
-  --success-color: #10b981;
-  --danger-color: #ef4444;
-  --warning-color: #f59e0b;
-  --bg-color: #ffffff;
-  --text-color: #1f2937;
-  --border-color: #e5e7eb;
-  --card-bg: #f9fafb;
-}
-
+/* 基础样式重置 */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
+/* CSS变量定义 */
+:root {
+  --primary-color: #4f46e5;
+  --success-color: #10b981;
+  --danger-color: #ef4444;
+  --secondary-color: #6b7280;
+  --background-color: #f8fafc;
+  --card-background: #ffffff;
+  --text-primary: #1f2937;
+  --text-secondary: #6b7280;
+  --border-color: #e5e7eb;
+  --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  --border-radius: 8px;
+}
+
+/* 全局样式 */
 body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  background: var(--bg-color);
-  color: var(--text-color);
+  background: var(--background-color);
+  color: var(--text-primary);
   width: 380px;
   min-height: 500px;
   max-height: 600px;
   overflow-y: auto;
 }
 
-.app-container {
+/* 应用容器 */
+#app {
   display: flex;
   flex-direction: column;
-  min-height: 100%;
+  min-height: 500px;
+}
+
+/* 头部样式 */
+.header {
+  background: var(--card-background);
   padding: 16px;
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.stats,
+.streak {
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
+.stats span,
+.streak span {
+  font-weight: 600;
+  color: var(--primary-color);
+}
+
+/* 模式导航 */
+.mode-nav {
+  display: flex;
+  background: var(--card-background);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.mode-btn {
+  flex: 1;
+  padding: 12px 8px;
+  border: none;
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border-bottom: 2px solid transparent;
+}
+
+.mode-btn:hover {
+  background: #f3f4f6;
+  color: var(--text-primary);
+}
+
+.mode-btn.active {
+  color: var(--primary-color);
+  border-bottom-color: var(--primary-color);
+  background: #f0f9ff;
 }
 
 /* 学习区域 */
 .learning-area {
   flex: 1;
+  padding: 20px;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--card-bg);
-  border-radius: 12px;
-  padding: 20px;
-  margin-bottom: 16px;
   min-height: 200px;
-  max-height: 350px;
-  overflow-y: auto;
 }
 
-/* 单词卡片优化 */
-.word-card {
-  width: 100%;
-  text-align: center;
-  max-height: 300px;
-  overflow-y: auto;
-}
-
-/* 单词释义区域滚动 */
-.word-meanings {
-  text-align: left;
-  max-height: 180px;
-  overflow-y: auto;
-  padding-right: 8px;
-}
-
-/* 滚动条样式 */
-.word-meanings::-webkit-scrollbar,
-.learning-area::-webkit-scrollbar,
-body::-webkit-scrollbar {
-  width: 6px;
-}
-
-.word-meanings::-webkit-scrollbar-track,
-.learning-area::-webkit-scrollbar-track,
-body::-webkit-scrollbar-track {
-  background: #f1f1f1;
-  border-radius: 3px;
-}
-
-.word-meanings::-webkit-scrollbar-thumb,
-.learning-area::-webkit-scrollbar-thumb,
-body::-webkit-scrollbar-thumb {
-  background: var(--primary-color);
-  border-radius: 3px;
-}
-
-.word-meanings::-webkit-scrollbar-thumb:hover,
-.learning-area::-webkit-scrollbar-thumb:hover,
-body::-webkit-scrollbar-thumb:hover {
-  background: var(--primary-dark);
-}
-
-/* 填空练习模式优化 */
-.fill-exercise {
-  text-align: center;
-  max-height: 300px;
-  overflow-y: auto;
-}
-
-/* 响应式调整 */
-@media (max-height: 600px) {
-  .learning-area {
-    max-height: 280px;
-  }
-
-  .word-meanings {
-    max-height: 150px;
-  }
-}
-
+/* 欢迎消息 */
 .welcome-message {
   text-align: center;
+  max-width: 300px;
+}
+
+.welcome-message h2 {
+  font-size: 18px;
+  margin-bottom: 8px;
+  color: var(--text-primary);
 }
 
 .welcome-message p {
-  font-size: 16px;
-  margin-bottom: 16px;
-  color: #6b7280;
+  color: var(--text-secondary);
+  margin-bottom: 20px;
+  font-size: 14px;
 }
 
-.start-btn {
+/* 按钮样式 */
+.btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: var(--border-radius);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-decoration: none;
+  display: inline-block;
+  text-align: center;
+}
+
+.btn-primary {
   background: var(--primary-color);
   color: white;
-  border: none;
-  padding: 12px 24px;
-  border-radius: 8px;
-  font-size: 14px;
-  cursor: pointer;
-  transition: background 0.2s;
 }
 
-.start-btn:hover {
-  background: var(--primary-dark);
+.btn-primary:hover {
+  background: #4338ca;
+  transform: translateY(-1px);
 }
 
-/* 底部操作区域 */
-.action-area {
-  display: flex;
-  gap: 12px;
+.btn-success {
+  background: var(--success-color);
+  color: white;
 }
 
-.action-btn {
-  flex: 1;
-  padding: 12px 16px;
-  border: none;
-  border-radius: 8px;
-  font-size: 14px;
-  cursor: pointer;
-  transition: background 0.2s;
-  transition: background 0.2s;
+.btn-success:hover {
+  background: #059669;
 }
 
-/* 在现有CSS基础上添加缺失的样式 */
+.btn-danger {
+  background: var(--danger-color);
+  color: white;
+}
+
+.btn-danger:hover {
+  background: #dc2626;
+}
+
+.btn-secondary {
+  background: var(--secondary-color);
+  color: white;
+}
+
+.btn-secondary:hover {
+  background: #4b5563;
+}
 
 /* 控制按钮区域 */
 .controls {
   display: flex;
   gap: 8px;
-  margin-bottom: 16px;
+  padding: 16px;
+  background: var(--card-background);
+  border-top: 1px solid var(--border-color);
 }
 
-.control-btn {
+.controls .btn {
   flex: 1;
-  padding: 10px 16px;
-  border: none;
-  border-radius: 8px;
-  font-size: 13px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s;
+  padding: 12px 8px;
 }
 
-.know-btn {
-  background: var(--success-color);
-  color: white;
-}
-
-.know-btn:hover {
-  background: #059669;
-}
-
-.unknown-btn {
-  background: var(--danger-color);
-  color: white;
-}
-
-.unknown-btn:hover {
-  background: #dc2626;
-}
-
-.pass-btn {
-  background: var(--warning-color);
-  color: white;
-}
-
-.pass-btn:hover {
-  background: #d97706;
-}
-
-/* 单词卡片 */
+/* 单词卡片样式 */
 .word-card {
-  width: 100%;
+  background: var(--card-background);
+  border-radius: var(--border-radius);
+  padding: 24px;
+  box-shadow: var(--shadow);
   text-align: center;
-}
-
-.word-header {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-  margin-bottom: 8px;
+  width: 100%;
+  max-width: 320px;
 }
 
 .word-text {
-  font-size: 24px;
-  font-weight: bold;
-  color: var(--primary-color);
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 12px;
+}
+
+.word-pronunciation {
+  font-size: 16px;
+  color: var(--text-secondary);
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
 }
 
 .audio-btn {
@@ -225,293 +218,194 @@ body::-webkit-scrollbar-thumb:hover {
   cursor: pointer;
   padding: 4px;
   border-radius: 4px;
-  transition: background 0.2s;
+  transition: background 0.2s ease;
 }
 
 .audio-btn:hover {
-  background: var(--border-color);
+  background: #f3f4f6;
 }
 
-.word-pronunciation {
-  font-size: 14px;
-  color: #6b7280;
-  margin-bottom: 16px;
-}
-
-.word-meanings {
-  text-align: left;
-}
-
-.meaning-item {
+.word-meaning {
+  font-size: 16px;
+  color: var(--text-primary);
   margin-bottom: 12px;
-  padding: 8px;
-  background: white;
-  border-radius: 6px;
-  border: 1px solid var(--border-color);
+  line-height: 1.5;
+}
+
+.word-example {
+  font-size: 14px;
+  color: var(--text-secondary);
+  font-style: italic;
+  line-height: 1.4;
+}
+
+/* 填空练习样式 */
+.fill-exercise {
+  width: 100%;
+}
+
+.fill-exercise h3 {
+  font-size: 16px;
+  margin-bottom: 16px;
+  color: var(--text-primary);
+}
+
+.word-input-area {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.word-input {
+  flex: 1;
+  padding: 10px 12px;
+  border: 2px solid var(--border-color);
+  border-radius: var(--border-radius);
+  font-size: 16px;
+  transition: border-color 0.2s ease;
+}
+
+.word-input:focus {
+  outline: none;
+  border-color: var(--primary-color);
+}
+
+.meaning-hint {
+  text-align: left;
+  margin-bottom: 16px;
+  padding: 12px;
+  background: #f8fafc;
+  border-radius: var(--border-radius);
+  border-left: 4px solid var(--primary-color);
 }
 
 .part-of-speech {
-  display: inline-block;
-  background: var(--primary-color);
-  color: white;
-  padding: 2px 6px;
-  border-radius: 4px;
-  font-size: 11px;
-  margin-bottom: 4px;
+  font-weight: 600;
+  color: var(--primary-color);
+  font-size: 12px;
+  text-transform: uppercase;
 }
 
 .definition {
-  font-size: 13px;
+  margin-top: 4px;
+  color: var(--text-primary);
+  font-size: 14px;
   line-height: 1.4;
-  margin-bottom: 4px;
 }
 
-.example {
-  font-size: 12px;
-  color: #6b7280;
-  font-style: italic;
-}
-
-/* 底部区域 */
-.footer {
+.fill-controls {
   display: flex;
   gap: 8px;
+  margin-bottom: 16px;
 }
 
-.settings-btn,
-.stats-btn {
+.check-btn,
+.reveal-btn {
   flex: 1;
   padding: 8px 12px;
   border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
   background: white;
-  border-radius: 6px;
-  font-size: 12px;
+  color: var(--text-primary);
+  font-size: 14px;
   cursor: pointer;
-  transition: background 0.2s;
+  transition: all 0.2s ease;
 }
 
-.settings-btn:hover,
-.stats-btn:hover {
-  background: var(--card-bg);
+.check-btn:hover {
+  background: var(--success-color);
+  color: white;
+  border-color: var(--success-color);
 }
 
-/* 错误和加载状态 */
+.reveal-btn:hover {
+  background: var(--secondary-color);
+  color: white;
+  border-color: var(--secondary-color);
+}
+
+/* 答案结果显示 */
+.answer-result {
+  margin-top: 12px;
+  padding: 8px 12px;
+  border-radius: var(--border-radius);
+  font-size: 14px;
+  text-align: center;
+}
+
+.correct-answer {
+  background: #dcfce7;
+  color: #166534;
+  border: 1px solid #bbf7d0;
+}
+
+.wrong-answer {
+  background: #fef2f2;
+  color: #dc2626;
+  border: 1px solid #fecaca;
+}
+
+.revealed-answer {
+  background: #fef3c7;
+  color: #92400e;
+  border: 1px solid #fed7aa;
+}
+
+/* 加载和错误状态 */
 .loading {
   text-align: center;
-  color: #6b7280;
-  font-size: 14px;
+  color: var(--text-secondary);
+  padding: 40px 20px;
 }
 
 .error-message {
   text-align: center;
   color: var(--danger-color);
-}
-
-.error-message p {
-  margin-bottom: 12px;
-  font-size: 14px;
+  padding: 20px;
 }
 
 .retry-btn {
-  background: var(--primary-color);
-  color: white;
-  border: none;
+  margin-top: 12px;
   padding: 8px 16px;
-  border-radius: 6px;
-  font-size: 12px;
-  cursor: pointer;
-}
-
-.retry-btn:hover {
-  background: var(--primary-dark);
-}
-
-/* 快速背诵模式样式 */
-.quick-hint {
-  text-align: center;
-  margin-top: 20px;
-  padding: 16px;
-  background: #f0f9ff;
-  border-radius: 8px;
-  border-left: 4px solid var(--primary-color);
-}
-
-.quick-hint p {
-  color: #1e40af;
-  font-size: 14px;
-  margin: 0;
-}
-
-/* 填空练习模式样式 */
-.fill-exercise {
-  text-align: center;
-  width: 100%;
-}
-
-.fill-exercise h3 {
-  color: var(--primary-color);
-  margin-bottom: 16px;
-  font-size: 18px;
-}
-
-/* 填空练习输入区域 */
-.word-input-area {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-  margin-bottom: 12px;
-}
-
-.word-input {
-  font-size: 18px;
-  padding: 12px 16px;
-  border: 2px solid var(--primary-color);
-  border-radius: 8px;
-  text-align: center;
-  min-width: 200px;
-  outline: none;
-  transition: border-color 0.2s;
-  background: white;
-}
-
-.word-input:focus {
-  border-color: var(--primary-dark);
-  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
-}
-
-/* 释义提示区域 */
-.meaning-hint {
-  text-align: left;
-  margin: 16px 0;
-  padding: 12px;
-  background: #fef3c7;
-  border-radius: 8px;
-  border-left: 4px solid var(--warning-color);
-}
-
-.meaning-hint .part-of-speech {
-  display: inline-block;
   background: var(--primary-color);
   color: white;
-  padding: 2px 8px;
-  border-radius: 4px;
-  font-size: 12px;
-  font-weight: 600;
-  margin-bottom: 8px;
-  text-transform: uppercase;
-}
-
-.meaning-hint .definition {
-  margin: 0;
-  font-size: 14px;
-  line-height: 1.5;
-  color: #92400e;
-}
-
-/* 填空控制按钮 */
-.fill-controls {
-  display: flex;
-  gap: 8px;
-  margin-top: 16px;
-  justify-content: center;
-}
-
-.check-btn,
-.reveal-btn {
-  padding: 10px 20px;
   border: none;
-  border-radius: 6px;
+  border-radius: var(--border-radius);
+  cursor: pointer;
   font-size: 14px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s;
 }
 
-.check-btn {
-  background: var(--success-color);
-  color: white;
+/* 动画效果 */
+.fade-in {
+  animation: fadeIn 0.3s ease-in;
 }
 
-.check-btn:hover {
-  background: #059669;
-  transform: translateY(-1px);
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-.reveal-btn {
-  background: var(--warning-color);
-  color: white;
+/* 滚动条样式 */
+::-webkit-scrollbar {
+  width: 6px;
 }
 
-.reveal-btn:hover {
-  background: #d97706;
-  transform: translateY(-1px);
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
 }
 
-/* 答案结果显示 */
-.answer-result {
-  margin-top: 16px;
-  text-align: center;
-  min-height: 24px;
+::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 3px;
 }
 
-.correct-answer {
-  color: var(--success-color);
-  font-weight: 500;
-  padding: 8px 12px;
-  background: rgba(16, 185, 129, 0.1);
-  border-radius: 6px;
-  border: 1px solid rgba(16, 185, 129, 0.2);
-}
-
-.wrong-answer {
-  color: var(--danger-color);
-  font-weight: 500;
-  padding: 8px 12px;
-  background: rgba(239, 68, 68, 0.1);
-  border-radius: 6px;
-  border: 1px solid rgba(239, 68, 68, 0.2);
-}
-
-.revealed-answer {
-  color: var(--warning-color);
-  font-weight: 500;
-  padding: 8px 12px;
-  background: rgba(245, 158, 11, 0.1);
-  border-radius: 6px;
-  border: 1px solid rgba(245, 158, 11, 0.2);
-}
-
-.result-icon {
-  font-size: 18px;
-  margin-right: 8px;
-}
-
-.result-text strong {
-  color: var(--primary-color);
-}
-
-/* 确保模式按钮样式正确 */
-.mode-btn {
-  flex: 1;
-  padding: 8px 12px;
-  border: none;
-  background: transparent;
-  border-radius: 6px;
-  font-size: 12px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s;
-  color: #6b7280;
-}
-
-.mode-btn.active {
-  background: var(--primary-color);
-  color: white;
-  font-weight: 600;
-}
-
-.mode-btn:hover:not(.active) {
-  background: #e5e7eb;
-  color: var(--primary-color);
+::-webkit-scrollbar-thumb:hover {
+  background: #a1a1a1;
 }

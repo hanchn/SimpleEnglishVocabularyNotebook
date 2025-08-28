@@ -14,6 +14,7 @@ class VocabularyExtension {
     this.bindEvents();
   }
 
+  // 更新事件绑定，移除设置和统计按钮的事件
   bindEvents() {
     // 模式切换
     document.querySelectorAll('.mode-btn').forEach(btn => {
@@ -21,12 +22,15 @@ class VocabularyExtension {
         this.switchMode(e.target.dataset.mode);
       });
     });
-
+  
     // 开始学习
-    document.getElementById('startBtn').addEventListener('click', () => {
-      this.startLearning();
-    });
-
+    const startBtn = document.getElementById('startBtn');
+    if (startBtn) {
+      startBtn.addEventListener('click', () => {
+        this.startLearning();
+      });
+    }
+  
     // 控制按钮
     document.getElementById('knowBtn').addEventListener('click', () => {
       this.markWord(true);
@@ -39,6 +43,21 @@ class VocabularyExtension {
     document.getElementById('passBtn').addEventListener('click', () => {
       this.nextWord();
     });
+  }
+
+  // 更新开始学习方法
+  async startLearning() {
+    try {
+      const welcomeMessage = document.querySelector('.welcome-message');
+      const controls = document.getElementById('controls');
+      
+      if (welcomeMessage) welcomeMessage.style.display = 'none';
+      if (controls) controls.style.display = 'flex';
+      
+      await this.nextWord();
+    } catch (error) {
+      this.showError('开始学习失败，请重试');
+    }
   }
 
   async loadStats() {

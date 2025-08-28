@@ -1,60 +1,49 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>英语单词记忆本</title>
-  <link rel="stylesheet" href="../css/popup.css">
-</head>
-<body>
-  <div class="app-container">
-    <!-- 头部统计 -->
-    <header class="header">
-      <h1>📚 单词记忆本</h1>
-      <div class="stats">
-        <div class="stat-item">
-          <span class="stat-number" id="totalWords">-</span>
-          <span class="stat-label">总词汇</span>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>智能英语单词速记本</title>
+    <link rel="stylesheet" href="../css/popup.css" />
+  </head>
+  <body>
+    <!-- 应用的完整UI结构 -->
+    <div id="app">
+      <!-- 顶部状态栏 -->
+      <header class="header">
+        <div class="stats">总词汇: <span id="totalWords">0</span></div>
+        <div class="streak">连续: <span id="streakDays">0</span>天</div>
+      </header>
+
+      <!-- 模式切换 -->
+      <nav class="mode-nav">
+        <button class="mode-btn active" data-mode="quick">快速背诵</button>
+        <button class="mode-btn" data-mode="fill">填空练习</button>
+        <button class="mode-btn" data-mode="example">例句学习</button>
+      </nav>
+
+      <!-- 学习区域 -->
+      <main class="learning-area" id="learningArea">
+        <!-- 欢迎消息 -->
+        <div class="welcome-message">
+          <h2>🎯 开始你的英语学习之旅</h2>
+          <p>选择学习模式，点击开始学习按钮</p>
+          <button id="startBtn" class="btn btn-primary">开始学习</button>
         </div>
-        <div class="stat-item">
-          <span class="stat-number" id="streakDays">-</span>
-          <span class="stat-label">连续天数</span>
-        </div>
-      </div>
-    </header>
+      </main>
 
-    <!-- 模式切换 -->
-    <nav class="mode-nav">
-      <button class="mode-btn active" data-mode="quick">快速背诵</button>
-      <button class="mode-btn" data-mode="fill">填空练习</button>
-      <button class="mode-btn" data-mode="example">例句学习</button>
-    </nav>
-
-    <!-- 学习区域 -->
-    <main class="learning-area" id="learningArea">
-      <div class="welcome-message">
-        <p>🎯 开始你的单词学习之旅</p>
-        <button class="start-btn" id="startBtn">开始学习</button>
-      </div>
-    </main>
-
-    <!-- 控制按钮 -->
-    <div class="controls" id="controls" style="display: none;">
-      <button class="control-btn know-btn" id="knowBtn">认识 ✓</button>
-      <button class="control-btn unknown-btn" id="unknownBtn">不认识 ✗</button>
-      <button class="control-btn pass-btn" id="passBtn">跳过 →</button>
+      <!-- 操作按钮 -->
+      <footer class="controls" id="controls" style="display: none">
+        <button id="knowBtn" class="btn btn-success">认识</button>
+        <button id="unknownBtn" class="btn btn-danger">不认识</button>
+        <button id="passBtn" class="btn btn-secondary">Pass</button>
+      </footer>
     </div>
 
-    <!-- 设置按钮 -->
-    <footer class="footer">
-      <button class="settings-btn" id="settingsBtn">⚙️ 设置</button>
-      <button class="stats-btn" id="statsBtn">📊 统计</button>
-    </footer>
-  </div>
-
-  <script src="../js/storage.js"></script>
-  <script src="../js/api.js"></script>
-  <script src="../js/audio.js"></script>
-  <script src="../js/popup.js"></script>
-</body>
+    <!-- 脚本加载 -->
+    <script src="../js/storage.js"></script>
+    <script src="../js/api.js"></script>
+    <script src="../js/audio.js"></script>
+    <script src="../js/popup.js"></script>
+  </body>
 </html>
