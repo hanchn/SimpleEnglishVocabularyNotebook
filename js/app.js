@@ -163,7 +163,7 @@ class VocabularyApp {
   }
   
   // 显示单词 - 添加数据验证
-  displayWord() {
+  async displayWord() {
     if (!this.currentWord || !this.currentWord.word) {
       this.showError('单词数据加载失败');
       return;
@@ -190,6 +190,12 @@ class VocabularyApp {
       case 'example':
         this.displayExampleMode();
         break;
+    }
+    
+    // 获取单词图片
+    const image = await this.api.getWordImage(this.currentWord.word);
+    if (image) {
+      // 在HTML中添加图片显示
     }
   }
   

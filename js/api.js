@@ -87,4 +87,23 @@ class APIManager {
       passCount: 0
     };
   }
+  
+  async getWordImage(word) {
+    try {
+      // 使用Unsplash API获取图片
+      const response = await fetch(`https://api.unsplash.com/search/photos?query=${word}&per_page=1&client_id=YOUR_ACCESS_KEY`);
+      const data = await response.json();
+      
+      if (data.results && data.results.length > 0) {
+        return {
+          url: data.results[0].urls.small,
+          alt: data.results[0].alt_description || word
+        };
+      }
+      return null;
+    } catch (error) {
+      console.error('获取图片失败:', error);
+      return null;
+    }
+  }
 }
