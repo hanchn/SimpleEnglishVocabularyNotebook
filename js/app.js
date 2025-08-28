@@ -173,7 +173,17 @@ class VocabularyApp {
     }
   }
   
-  // 加载下一个单词
+  // 保留这个版本的startLearning（功能更完整）
+  async startLearning() {
+    this.showLoading();
+    try {
+      await this.loadNextWord();
+    } catch (error) {
+      this.showError(error.message || '加载单词失败');
+    }
+  }
+  
+  // 保留这个版本的loadNextWord（功能更完整）
   async loadNextWord() {
     try {
       this.currentWord = await this.getNextWord();
@@ -182,6 +192,10 @@ class VocabularyApp {
       this.showError(error.message || '加载单词失败');
     }
   }
+  
+  // 删除第113-116行的重复startLearning方法
+  // 删除第145-148行的重复loadNextWord方法
+}
   
   // 显示单词 - 添加数据验证
   // 显示单词 - 添加图片支持
