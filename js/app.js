@@ -181,7 +181,13 @@ class VocabularyApp {
 
     // 显示单词
     displayWord(wordData) {
-        document.getElementById('wordText').textContent = wordData.word;
+        const wordElement = document.getElementById('wordText');
+        wordElement.textContent = wordData.word;
+        // 添加中文翻译作为title属性
+        if (wordData.chinese) {
+            wordElement.title = wordData.chinese;
+        }
+        
         document.getElementById('wordPhonetic').textContent = wordData.phonetic || '暂无音标';
         
         if (wordData.meanings && wordData.meanings.length > 0) {
