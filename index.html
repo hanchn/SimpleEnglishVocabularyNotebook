@@ -3,89 +3,60 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>智能英语单词速记本</title>
+    <title>简单英语单词本</title>
     <link rel="stylesheet" href="css/style.css" />
   </head>
   <body>
-    <!-- 应用的完整UI结构 -->
-    <div id="app">
+    <div class="app">
       <!-- 顶部状态栏 -->
-      <header class="header">
-        <div class="stats">总词汇: <span id="totalWords">0</span></div>
-        <div class="streak">连续: <span id="streakDays">0</span>天</div>
+      <header class="status-bar">
+        <div class="app-title">📚 简单英语单词本</div>
       </header>
 
-      <!-- 模式切换 -->
-      <nav class="mode-nav">
-        <button class="mode-btn active" data-mode="quick">快速背诵</button>
-        <button class="mode-btn" data-mode="fill">填空练习</button>
-        <button class="mode-btn" data-mode="example">例句学习</button>
-      </nav>
-
-      <!-- 学习区域 -->
-      <main class="learning-area" id="learningArea">
+      <!-- 主要内容区域 -->
+      <main class="learning-area">
         <!-- 欢迎消息 -->
         <div class="welcome-message" id="welcomeMessage">
-          <h2>🎯 开始你的英语学习之旅</h2>
-          <p>选择学习模式，点击开始学习按钮</p>
-          <button id="startBtn" class="btn btn-primary">开始学习</button>
+          <h2>🎯 开始学习英语单词</h2>
+          <p>点击下方按钮开始你的单词学习之旅</p>
+          <button class="btn btn-primary btn-large" id="startBtn">
+            开始学习
+          </button>
         </div>
 
-        <!-- 单词卡片 - 快速模式 -->
-        <div class="word-card" id="quickModeCard" style="display: none">
-          <div class="word-text" id="wordText">Loading...</div>
-          <div class="word-pronunciation" id="wordPronunciation"></div>
+        <!-- 单词卡片 -->
+        <div class="word-card" id="wordCard" style="display: none">
+          <!-- 单词主体 -->
+          <div class="word-header">
+            <h1 class="word-text" id="wordText">Loading...</h1>
+            <div class="word-pronunciation-container">
+              <span class="word-pronunciation" id="wordPronunciation"></span>
+              <button class="btn btn-audio" id="playWordBtn" title="播放发音">
+                🔊
+              </button>
+            </div>
+          </div>
+
+          <!-- 单词图片 -->
+          <div class="word-image-container">
+            <img class="word-image" id="wordImage" src="" alt="单词图片" />
+          </div>
+
+          <!-- 单词释义 -->
           <div class="word-meaning" id="wordMeaning">
-            <strong id="partOfSpeech">-</strong><br />
-            <span id="definition">正在加载...</span>
+            <div class="part-of-speech" id="partOfSpeech">-</div>
+            <div class="definition" id="definition">正在加载...</div>
           </div>
-          <div class="word-example" id="wordExample" style="display: none">
-            例句: <span id="exampleText"></span>
-          </div>
-          <button class="btn btn-secondary" id="playWordBtn">🔊 发音</button>
-        </div>
 
-        <!-- 单词卡片 - 填空模式 -->
-        <div class="word-card" id="fillModeCard" style="display: none">
-          <div class="fill-blank" id="fillBlank">_ _ _ _</div>
-          <div class="word-meaning" id="fillMeaning">
-            <strong id="fillPartOfSpeech">-</strong><br />
-            <span id="fillDefinition">正在加载...</span>
-          </div>
-          <input
-            type="text"
-            class="fill-input"
-            id="fillInput"
-            placeholder="输入单词"
-          />
-          <div class="fill-buttons">
-            <button class="btn btn-primary" id="checkAnswerBtn">
-              检查答案
-            </button>
-            <button class="btn btn-secondary" id="revealAnswerBtn">
-              显示答案
-            </button>
-          </div>
-          <div id="fillResult"></div>
-        </div>
-
-        <!-- 单词卡片 - 例句模式 -->
-        <div class="word-card" id="exampleModeCard" style="display: none">
-          <div class="word-text" id="exampleWordText">Loading...</div>
-          <div class="word-pronunciation" id="exampleWordPronunciation"></div>
-          <div class="word-meaning" id="exampleWordMeaning">
-            <strong id="examplePartOfSpeech">-</strong><br />
-            <span id="exampleDefinition">正在加载...</span>
-          </div>
-          <div class="word-example" id="exampleWordExample">
-            <strong>例句:</strong><br />
-            <span id="exampleSentence">正在加载例句...</span>
-          </div>
-          <div class="example-buttons">
-            <button class="btn btn-secondary" id="playExampleWordBtn">
-              🔊 单词发音
-            </button>
-            <button class="btn btn-secondary" id="playExampleSentenceBtn">
+          <!-- 例句 -->
+          <div class="word-example" id="wordExample">
+            <div class="example-label">例句:</div>
+            <div class="example-text" id="exampleText">正在加载例句...</div>
+            <button
+              class="btn btn-audio btn-small"
+              id="playExampleBtn"
+              title="播放例句"
+            >
               🔊 例句发音
             </button>
           </div>
@@ -105,9 +76,8 @@
         </div>
       </main>
 
-      <!-- 操作按钮 -->
+      <!-- 导航控制 -->
       <footer class="controls" id="controls" style="display: none">
-        <!-- 单词导航按钮 -->
         <div class="word-navigation">
           <button id="prevBtn" class="btn btn-nav" title="上一个单词">
             ⬅️ 上一个
@@ -116,11 +86,6 @@
           <button id="nextBtn" class="btn btn-nav" title="下一个单词">
             下一个 ➡️
           </button>
-        </div>
-
-        <!-- 获取新单词按钮 -->
-        <div class="new-word-section">
-          <button id="newWordBtn" class="btn btn-primary">获取新单词</button>
         </div>
       </footer>
     </div>
