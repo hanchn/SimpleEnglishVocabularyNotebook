@@ -47,6 +47,19 @@ class VocabularyApp {
         this.startLearning();
       });
     }
+    
+    // 获取新单词按钮
+    const newWordBtn = document.getElementById('newWordBtn');
+    if (newWordBtn) {
+      newWordBtn.addEventListener('click', async () => {
+        try {
+          this.currentWord = await this.api.getRandomWord();
+          this.displayWord();
+        } catch (error) {
+          this.showError('获取新单词失败');
+        }
+      });
+    }
   }
   
   // 加载统计数据
@@ -138,11 +151,14 @@ class VocabularyApp {
   async getNextWord() {
     const words = this.storage.getAllWords();
     if (words.length === 0) {
-      try {
-        return await this.api.getRandomWord();
-      } catch (error) {
-        console.error('获取新单词失败:', error);
-        throw new Error('无法获取单词数据，请检查网络连接');
+      // 获取下一个单词（总是获取新单词）
+      async getNextWord() {
+        try {
+          return await this.api.getRandomWord();
+        } catch (error) {
+          console.error('获取新单词失败:', error);
+          throw new Error('无法获取单词数据，请检查网络连接');
+        }
       }
     }
     
