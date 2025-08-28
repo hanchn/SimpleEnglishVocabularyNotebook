@@ -1,55 +1,694 @@
 [
   {
     "id": "1",
-    "word": "vocabulary",
-    "pronunciation": "/vəˈkæbjʊləri/",
-    "chinese": "词汇，词汇量",
+    "word": "abandon",
+    "pronunciation": "/əˈbændən/",
+    "chinese": "放弃，抛弃",
     "meanings": [
       {
-        "partOfSpeech": "noun",
-        "definition": "The body of words used in a particular language.",
-        "example": "Reading helps expand your vocabulary."
+        "partOfSpeech": "verb",
+        "definition": "To give up completely; to desert or leave behind.",
+        "chineseDefinition": "完全放弃；遗弃或留下。",
+        "examples": [
+          {
+            "english": "They had to abandon their car in the flood.",
+            "chinese": "他们不得在不洪水中抛弃汽车。"
+          },
+          {
+            "english": "Don't abandon hope even in difficult times.",
+            "chinese": "即使在困难时期也不要放弃希望。"
+          }
+        ],
+        "synonyms": ["desert", "forsake", "leave"],
+        "antonyms": ["keep", "maintain", "continue"]
       }
     ],
-    "difficulty": 0,
-    "frequency": 1.0,
+    "difficulty": 2,
+    "frequency": 0.8,
+    "tags": ["verb", "common"],
     "addedDate": "2024-01-15T10:00:00.000Z",
     "reviewCount": 0,
     "passCount": 0
   },
   {
     "id": "2",
-    "word": "example",
-    "pronunciation": "/ɪɡˈzæmpəl/",
-    "chinese": "例子，示例",
+    "word": "ability",
+    "pronunciation": "/əˈbɪləti/",
+    "chinese": "能力，才能",
     "meanings": [
       {
         "partOfSpeech": "noun",
-        "definition": "A thing characteristic of its kind or illustrating a general rule.",
-        "example": "This is a good example of modern architecture."
+        "definition": "The capacity or skill to do something.",
+        "chineseDefinition": "做某事的能力或技能。",
+        "examples": [
+          {
+            "english": "She has the ability to solve complex problems.",
+            "chinese": "她有解决复杂问题的能力。"
+          },
+          {
+            "english": "His musical ability impressed everyone.",
+            "chinese": "他的音乐才能给每个人留下了深刻印象。"
+          }
+        ],
+        "synonyms": ["capability", "skill", "talent"],
+        "antonyms": ["inability", "incompetence"]
       }
     ],
-    "difficulty": 0,
+    "difficulty": 1,
     "frequency": 1.0,
-    "addedDate": "2024-01-15T10:05:00.000Z",
+    "tags": ["noun", "basic"],
+    "addedDate": "2024-01-15T10:01:00.000Z",
     "reviewCount": 0,
     "passCount": 0
   },
   {
     "id": "3",
-    "word": "memory",
-    "pronunciation": "/ˈmeməri/",
-    "chinese": "记忆，内存",
+    "word": "about",
+    "pronunciation": "/əˈbaʊt/",
+    "chinese": "关于，大约",
     "meanings": [
       {
-        "partOfSpeech": "noun",
-        "definition": "The faculty by which the mind stores and remembers information.",
-        "example": "She has an excellent memory for faces."
+        "partOfSpeech": "preposition",
+        "definition": "On the subject of; concerning.",
+        "chineseDefinition": "关于；涉及。",
+        "examples": [
+          {
+            "english": "We talked about the weather.",
+            "chinese": "我们谈论了天气。"
+          },
+          {
+            "english": "Tell me about your trip.",
+            "chinese": "告诉我你的旅行情况。"
+          }
+        ],
+        "synonyms": ["concerning", "regarding", "on"],
+        "antonyms": []
+      },
+      {
+        "partOfSpeech": "adverb",
+        "definition": "Approximately; nearly.",
+        "chineseDefinition": "大约；几乎。",
+        "examples": [
+          {
+            "english": "It's about five o'clock.",
+            "chinese": "大约五点钟了。"
+          },
+          {
+            "english": "There were about fifty people there.",
+            "chinese": "那里大约有五十个人。"
+          }
+        ],
+        "synonyms": ["approximately", "roughly", "around"],
+        "antonyms": ["exactly", "precisely"]
       }
     ],
     "difficulty": 0,
     "frequency": 1.0,
+    "tags": ["preposition", "adverb", "basic"],
+    "addedDate": "2024-01-15T10:02:00.000Z",
+    "reviewCount": 0,
+    "passCount": 0
+  },
+  {
+    "id": "4",
+    "word": "above",
+    "pronunciation": "/əˈbʌv/",
+    "chinese": "在...上面，超过",
+    "meanings": [
+      {
+        "partOfSpeech": "preposition",
+        "definition": "In or to a higher place than; over.",
+        "chineseDefinition": "在比...更高的地方；在...之上。",
+        "examples": [
+          {
+            "english": "The plane flew above the clouds.",
+            "chinese": "飞机在云层上方飞行。"
+          },
+          {
+            "english": "The temperature is above normal.",
+            "chinese": "温度高于正常水平。"
+          }
+        ],
+        "synonyms": ["over", "beyond", "higher than"],
+        "antonyms": ["below", "under", "beneath"]
+      }
+    ],
+    "difficulty": 0,
+    "frequency": 1.0,
+    "tags": ["preposition", "basic"],
+    "addedDate": "2024-01-15T10:03:00.000Z",
+    "reviewCount": 0,
+    "passCount": 0
+  },
+  {
+    "id": "5",
+    "word": "accept",
+    "pronunciation": "/əkˈsept/",
+    "chinese": "接受，承认",
+    "meanings": [
+      {
+        "partOfSpeech": "verb",
+        "definition": "To receive willingly; to agree to.",
+        "chineseDefinition": "愿意接受；同意。",
+        "examples": [
+          {
+            "english": "I accept your apology.",
+            "chinese": "我接受你的道歉。"
+          },
+          {
+            "english": "She accepted the job offer.",
+            "chinese": "她接受了这份工作。"
+          }
+        ],
+        "synonyms": ["receive", "take", "agree to"],
+        "antonyms": ["reject", "refuse", "decline"]
+      }
+    ],
+    "difficulty": 1,
+    "frequency": 0.9,
+    "tags": ["verb", "common"],
+    "addedDate": "2024-01-15T10:04:00.000Z",
+    "reviewCount": 0,
+    "passCount": 0
+  },
+  {
+    "id": "6",
+    "word": "access",
+    "pronunciation": "/ˈækses/",
+    "chinese": "进入，访问",
+    "meanings": [
+      {
+        "partOfSpeech": "noun",
+        "definition": "The ability or right to enter, approach, or pass to and from.",
+        "chineseDefinition": "进入、接近或通过的能力或权利。",
+        "examples": [
+          {
+            "english": "Students have access to the library 24/7.",
+            "chinese": "学生可以24小时使用图书馆。"
+          },
+          {
+            "english": "The building has wheelchair access.",
+            "chinese": "这栋建筑有轮椅通道。"
+          }
+        ],
+        "synonyms": ["entry", "admission", "approach"],
+        "antonyms": ["denial", "restriction"]
+      },
+      {
+        "partOfSpeech": "verb",
+        "definition": "To obtain or retrieve information from a storage device.",
+        "chineseDefinition": "从存储设备获取或检索信息。",
+        "examples": [
+          {
+            "english": "You can access your files from any computer.",
+            "chinese": "你可以从任何电脑访问你的文件。"
+          }
+        ],
+        "synonyms": ["retrieve", "obtain", "get"],
+        "antonyms": ["block", "restrict"]
+      }
+    ],
+    "difficulty": 2,
+    "frequency": 0.8,
+    "tags": ["noun", "verb", "technology"],
+    "addedDate": "2024-01-15T10:05:00.000Z",
+    "reviewCount": 0,
+    "passCount": 0
+  },
+  {
+    "id": "7",
+    "word": "account",
+    "pronunciation": "/əˈkaʊnt/",
+    "chinese": "账户，解释",
+    "meanings": [
+      {
+        "partOfSpeech": "noun",
+        "definition": "A record of financial transactions; a description of events.",
+        "chineseDefinition": "金融交易记录；事件描述。",
+        "examples": [
+          {
+            "english": "I need to check my bank account.",
+            "chinese": "我需要查看我的银行账户。"
+          },
+          {
+            "english": "Give me an account of what happened.",
+            "chinese": "告诉我发生了什么事。"
+          }
+        ],
+        "synonyms": ["record", "report", "description"],
+        "antonyms": []
+      }
+    ],
+    "difficulty": 1,
+    "frequency": 0.9,
+    "tags": ["noun", "business"],
+    "addedDate": "2024-01-15T10:06:00.000Z",
+    "reviewCount": 0,
+    "passCount": 0
+  },
+  {
+    "id": "8",
+    "word": "achieve",
+    "pronunciation": "/əˈtʃiːv/",
+    "chinese": "实现，达到",
+    "meanings": [
+      {
+        "partOfSpeech": "verb",
+        "definition": "To successfully complete or accomplish something.",
+        "chineseDefinition": "成功完成或实现某事。",
+        "examples": [
+          {
+            "english": "She achieved her goal of running a marathon.",
+            "chinese": "她实现了跑马拉松的目标。"
+          },
+          {
+            "english": "Hard work helps you achieve success.",
+            "chinese": "努力工作帮助你获得成功。"
+          }
+        ],
+        "synonyms": ["accomplish", "attain", "reach"],
+        "antonyms": ["fail", "lose", "miss"]
+      }
+    ],
+    "difficulty": 2,
+    "frequency": 0.8,
+    "tags": ["verb", "success"],
+    "addedDate": "2024-01-15T10:07:00.000Z",
+    "reviewCount": 0,
+    "passCount": 0
+  },
+  {
+    "id": "9",
+    "word": "action",
+    "pronunciation": "/ˈækʃən/",
+    "chinese": "行动，动作",
+    "meanings": [
+      {
+        "partOfSpeech": "noun",
+        "definition": "The process of doing something; a deed or act.",
+        "chineseDefinition": "做某事的过程；行为或行动。",
+        "examples": [
+          {
+            "english": "We need to take action immediately.",
+            "chinese": "我们需要立即采取行动。"
+          },
+          {
+            "english": "His actions speak louder than words.",
+            "chinese": "他的行动比言语更有说服力。"
+          }
+        ],
+        "synonyms": ["deed", "act", "activity"],
+        "antonyms": ["inaction", "passivity"]
+      }
+    ],
+    "difficulty": 1,
+    "frequency": 1.0,
+    "tags": ["noun", "basic"],
+    "addedDate": "2024-01-15T10:08:00.000Z",
+    "reviewCount": 0,
+    "passCount": 0
+  },
+  {
+    "id": "10",
+    "word": "active",
+    "pronunciation": "/ˈæktɪv/",
+    "chinese": "积极的，活跃的",
+    "meanings": [
+      {
+        "partOfSpeech": "adjective",
+        "definition": "Engaging in physical or mental activity; energetic.",
+        "chineseDefinition": "参与身体或精神活动的；精力充沛的。",
+        "examples": [
+          {
+            "english": "She leads an active lifestyle.",
+            "chinese": "她过着积极的生活方式。"
+          },
+          {
+            "english": "He is very active in community service.",
+            "chinese": "他在社区服务方面非常积极。"
+          }
+        ],
+        "synonyms": ["energetic", "busy", "lively"],
+        "antonyms": ["inactive", "passive", "lazy"]
+      }
+    ],
+    "difficulty": 1,
+    "frequency": 0.9,
+    "tags": ["adjective", "personality"],
+    "addedDate": "2024-01-15T10:09:00.000Z",
+    "reviewCount": 0,
+    "passCount": 0
+  },
+  {
+    "id": "11",
+    "word": "actual",
+    "pronunciation": "/ˈæktʃuəl/",
+    "chinese": "实际的，真实的",
+    "meanings": [
+      {
+        "partOfSpeech": "adjective",
+        "definition": "Existing in fact; real rather than imagined or supposed.",
+        "chineseDefinition": "事实上存在的；真实的而不是想象的或假设的。",
+        "examples": [
+          {
+            "english": "The actual cost was higher than expected.",
+            "chinese": "实际成本比预期的要高。"
+          },
+          {
+            "english": "What's the actual situation?",
+            "chinese": "实际情况是什么？"
+          }
+        ],
+        "synonyms": ["real", "genuine", "true"],
+        "antonyms": ["imaginary", "theoretical", "fake"]
+      }
+    ],
+    "difficulty": 2,
+    "frequency": 0.8,
+    "tags": ["adjective", "reality"],
     "addedDate": "2024-01-15T10:10:00.000Z",
+    "reviewCount": 0,
+    "passCount": 0
+  },
+  {
+    "id": "12",
+    "word": "address",
+    "pronunciation": "/əˈdres/",
+    "chinese": "地址，演讲",
+    "meanings": [
+      {
+        "partOfSpeech": "noun",
+        "definition": "The location where someone lives or works.",
+        "chineseDefinition": "某人居住或工作的地点。",
+        "examples": [
+          {
+            "english": "What's your home address?",
+            "chinese": "你的家庭住址是什么？"
+          },
+          {
+            "english": "Please send it to my office address.",
+            "chinese": "请寄到我的办公地址。"
+          }
+        ],
+        "synonyms": ["location", "residence", "place"],
+        "antonyms": []
+      },
+      {
+        "partOfSpeech": "verb",
+        "definition": "To speak to; to deal with or discuss.",
+        "chineseDefinition": "对...说话；处理或讨论。",
+        "examples": [
+          {
+            "english": "The president will address the nation tonight.",
+            "chinese": "总统今晚将向全国发表讲话。"
+          },
+          {
+            "english": "We need to address this problem immediately.",
+            "chinese": "我们需要立即解决这个问题。"
+          }
+        ],
+        "synonyms": ["speak to", "tackle", "handle"],
+        "antonyms": ["ignore", "avoid"]
+      }
+    ],
+    "difficulty": 1,
+    "frequency": 0.9,
+    "tags": ["noun", "verb", "communication"],
+    "addedDate": "2024-01-15T10:11:00.000Z",
+    "reviewCount": 0,
+    "passCount": 0
+  },
+  {
+    "id": "13",
+    "word": "admit",
+    "pronunciation": "/ədˈmɪt/",
+    "chinese": "承认，允许进入",
+    "meanings": [
+      {
+        "partOfSpeech": "verb",
+        "definition": "To acknowledge the truth of; to allow entry.",
+        "chineseDefinition": "承认...的真实性；允许进入。",
+        "examples": [
+          {
+            "english": "He admitted his mistake.",
+            "chinese": "他承认了自己的错误。"
+          },
+          {
+            "english": "Children under 12 are not admitted.",
+            "chinese": "12岁以下儿童不得入内。"
+          }
+        ],
+        "synonyms": ["acknowledge", "confess", "allow"],
+        "antonyms": ["deny", "refuse", "reject"]
+      }
+    ],
+    "difficulty": 2,
+    "frequency": 0.8,
+    "tags": ["verb", "honesty"],
+    "addedDate": "2024-01-15T10:12:00.000Z",
+    "reviewCount": 0,
+    "passCount": 0
+  },
+  {
+    "id": "14",
+    "word": "adult",
+    "pronunciation": "/ˈædʌlt/",
+    "chinese": "成年人，成人的",
+    "meanings": [
+      {
+        "partOfSpeech": "noun",
+        "definition": "A person who is fully grown or developed.",
+        "chineseDefinition": "完全成长或发育的人。",
+        "examples": [
+          {
+            "english": "This movie is for adults only.",
+            "chinese": "这部电影仅限成人观看。"
+          },
+          {
+            "english": "As an adult, you have more responsibilities.",
+            "chinese": "作为成年人，你有更多的责任。"
+          }
+        ],
+        "synonyms": ["grown-up", "mature person"],
+        "antonyms": ["child", "minor", "juvenile"]
+      },
+      {
+        "partOfSpeech": "adjective",
+        "definition": "Fully developed; mature.",
+        "chineseDefinition": "完全发育的；成熟的。",
+        "examples": [
+          {
+            "english": "She has a very adult attitude.",
+            "chinese": "她有非常成熟的态度。"
+          }
+        ],
+        "synonyms": ["mature", "grown-up"],
+        "antonyms": ["childish", "immature"]
+      }
+    ],
+    "difficulty": 1,
+    "frequency": 0.9,
+    "tags": ["noun", "adjective", "age"],
+    "addedDate": "2024-01-15T10:13:00.000Z",
+    "reviewCount": 0,
+    "passCount": 0
+  },
+  {
+    "id": "15",
+    "word": "advance",
+    "pronunciation": "/ədˈvæns/",
+    "chinese": "前进，提前",
+    "meanings": [
+      {
+        "partOfSpeech": "verb",
+        "definition": "To move forward; to make progress.",
+        "chineseDefinition": "向前移动；取得进步。",
+        "examples": [
+          {
+            "english": "Technology continues to advance rapidly.",
+            "chinese": "技术继续快速发展。"
+          },
+          {
+            "english": "The army advanced toward the city.",
+            "chinese": "军队向城市推进。"
+          }
+        ],
+        "synonyms": ["progress", "move forward", "develop"],
+        "antonyms": ["retreat", "withdraw", "regress"]
+      },
+      {
+        "partOfSpeech": "noun",
+        "definition": "Forward movement; progress or development.",
+        "chineseDefinition": "向前的运动；进步或发展。",
+        "examples": [
+          {
+            "english": "Medical advances have saved many lives.",
+            "chinese": "医学进步拯救了许多生命。"
+          }
+        ],
+        "synonyms": ["progress", "improvement", "development"],
+        "antonyms": ["setback", "decline"]
+      }
+    ],
+    "difficulty": 2,
+    "frequency": 0.8,
+    "tags": ["verb", "noun", "progress"],
+    "addedDate": "2024-01-15T10:14:00.000Z",
+    "reviewCount": 0,
+    "passCount": 0
+  },
+  {
+    "id": "16",
+    "word": "advantage",
+    "pronunciation": "/ədˈvæntɪdʒ/",
+    "chinese": "优势，好处",
+    "meanings": [
+      {
+        "partOfSpeech": "noun",
+        "definition": "A condition or circumstance that puts one in a favorable position.",
+        "chineseDefinition": "使人处于有利地位的条件或情况。",
+        "examples": [
+          {
+            "english": "Being tall is an advantage in basketball.",
+            "chinese": "身高是篮球运动的优势。"
+          },
+          {
+            "english": "What are the advantages of this plan?",
+            "chinese": "这个计划有什么优势？"
+          }
+        ],
+        "synonyms": ["benefit", "asset", "plus"],
+        "antonyms": ["disadvantage", "drawback", "handicap"]
+      }
+    ],
+    "difficulty": 2,
+    "frequency": 0.8,
+    "tags": ["noun", "benefit"],
+    "addedDate": "2024-01-15T10:15:00.000Z",
+    "reviewCount": 0,
+    "passCount": 0
+  },
+  {
+    "id": "17",
+    "word": "adventure",
+    "pronunciation": "/ədˈventʃər/",
+    "chinese": "冒险，奇遇",
+    "meanings": [
+      {
+        "partOfSpeech": "noun",
+        "definition": "An exciting or unusual experience; a risky undertaking.",
+        "chineseDefinition": "令人兴奋或不寻常的经历；冒险的事业。",
+        "examples": [
+          {
+            "english": "Their trip to the Amazon was a great adventure.",
+            "chinese": "他们的亚马逊之旅是一次伟大的冒险。"
+          },
+          {
+            "english": "Life is full of adventures if you're open to them.",
+            "chinese": "如果你愿意接受，生活充满了冒险。"
+          }
+        ],
+        "synonyms": ["expedition", "journey", "quest"],
+        "antonyms": ["routine", "boredom"]
+      }
+    ],
+    "difficulty": 2,
+    "frequency": 0.7,
+    "tags": ["noun", "experience"],
+    "addedDate": "2024-01-15T10:16:00.000Z",
+    "reviewCount": 0,
+    "passCount": 0
+  },
+  {
+    "id": "18",
+    "word": "advice",
+    "pronunciation": "/ədˈvaɪs/",
+    "chinese": "建议，忠告",
+    "meanings": [
+      {
+        "partOfSpeech": "noun",
+        "definition": "Guidance or recommendations offered with regard to future action.",
+        "chineseDefinition": "关于未来行动的指导或建议。",
+        "examples": [
+          {
+            "english": "Can you give me some advice about my career?",
+            "chinese": "你能给我一些关于职业的建议吗？"
+          },
+          {
+            "english": "His advice proved to be very helpful.",
+            "chinese": "他的建议证明非常有用。"
+          }
+        ],
+        "synonyms": ["guidance", "counsel", "recommendation"],
+        "antonyms": ["misguidance"]
+      }
+    ],
+    "difficulty": 1,
+    "frequency": 0.9,
+    "tags": ["noun", "help"],
+    "addedDate": "2024-01-15T10:17:00.000Z",
+    "reviewCount": 0,
+    "passCount": 0
+  },
+  {
+    "id": "19",
+    "word": "affect",
+    "pronunciation": "/əˈfekt/",
+    "chinese": "影响，感动",
+    "meanings": [
+      {
+        "partOfSpeech": "verb",
+        "definition": "To have an influence on; to make a change to.",
+        "chineseDefinition": "对...有影响；使...发生变化。",
+        "examples": [
+          {
+            "english": "The weather can affect your mood.",
+            "chinese": "天气会影响你的心情。"
+          },
+          {
+            "english": "How did the new policy affect sales?",
+            "chinese": "新政策如何影响销售？"
+          }
+        ],
+        "synonyms": ["influence", "impact", "change"],
+        "antonyms": ["ignore", "neglect"]
+      }
+    ],
+    "difficulty": 2,
+    "frequency": 0.8,
+    "tags": ["verb", "influence"],
+    "addedDate": "2024-01-15T10:18:00.000Z",
+    "reviewCount": 0,
+    "passCount": 0
+  },
+  {
+    "id": "20",
+    "word": "afraid",
+    "pronunciation": "/əˈfreɪd/",
+    "chinese": "害怕的，担心的",
+    "meanings": [
+      {
+        "partOfSpeech": "adjective",
+        "definition": "Feeling fear or anxiety; worried that something bad might happen.",
+        "chineseDefinition": "感到恐惧或焦虑；担心可能发生不好的事情。",
+        "examples": [
+          {
+            "english": "Don't be afraid to ask for help.",
+            "chinese": "不要害怕寻求帮助。"
+          },
+          {
+            "english": "I'm afraid I can't come to the party.",
+            "chinese": "恐怕我不能参加聚会了。"
+          }
+        ],
+        "synonyms": ["scared", "frightened", "worried"],
+        "antonyms": ["brave", "fearless", "confident"]
+      }
+    ],
+    "difficulty": 1,
+    "frequency": 0.9,
+    "tags": ["adjective", "emotion"],
+    "addedDate": "2024-01-15T10:19:00.000Z",
     "reviewCount": 0,
     "passCount": 0
   }

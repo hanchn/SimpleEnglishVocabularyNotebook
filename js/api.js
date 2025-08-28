@@ -107,7 +107,7 @@ class APIManager {
                 throw new Error(`本地词库中未找到单词: ${word}`);
             }
         }
-
+    
         try {
             console.log(`获取单词详情: ${word}`);
             const response = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${word}`);
@@ -119,21 +119,17 @@ class APIManager {
             const data = await response.json();
             const wordData = this.parseWordData(data, word);
             
-            // 在线模式下获取图片
-            if (this.mode === 'online') {
-                const imageUrl = await this.getWordImage(word);
-                if (imageUrl) {
-                    wordData.imageUrl = imageUrl;
-                }
-            }
-            
+            // 移除图片获取逻辑
             return wordData;
         } catch (error) {
             console.error('获取单词详情失败:', error);
             throw new Error(`无法获取单词 "${word}" 的详情: ${error.message}`);
         }
     }
-
+    
+    // 移除 getWordImage 方法
+    // async getWordImage(word) { ... } - 删除整个方法
+    
     // 解析单词数据
     parseWordData(data, requestedWord) {
         if (!Array.isArray(data) || data.length === 0) {
@@ -180,35 +176,6 @@ class APIManager {
             phonetic,
             meanings
         };
-    }
-
-    // 获取单词图片（使用Pexels API）
-    async getWordImage(word) {
-        if (this.mode === 'local') {
-            return null;
-        }
-
-        try {
-            // 使用Pexels API（免费，无需API key的方式）
-            const pexelsUrl = `https://images.pexels.com/photos/1/pexels-photo-1.jpeg?auto=compress&cs=tinysrgb&w=300&h=200&fit=crop`;
-            
-            // 或者使用Lorem Picsum（更简单的占位图片服务）
-            const loremPicsumUrl = `https://picsum.photos/300/200?random=${encodeURIComponent(word)}`;
-            
-            // 或者使用Pixabay的直接图片链接（无需API key）
-            const pixabayUrl = `https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885_960_720.jpg`;
-            
-            // 测试图片是否可以加载
-            const testResponse = await fetch(loremPicsumUrl, { method: 'HEAD' });
-            if (testResponse.ok) {
-                return loremPicsumUrl;
-            }
-        } catch (error) {
-            console.log('图片获取失败:', error.message);
-        }
-        
-        // 如果获取失败，返回null
-        return null;
     }
 }
 

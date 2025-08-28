@@ -10,6 +10,8 @@ class VocabularyApp {
         this.bindEvents();
         this.updateImageVisibility(window.apiManager.getMode());
         this.initTooltip();
+        // 添加音频管理器初始化
+        window.audioManager = new AudioManager();
     }
 
     // 初始化气泡功能
@@ -180,69 +182,160 @@ class VocabularyApp {
     }
 
     // 显示单词
+    // 显示单词信息（增强版）
     displayWord(wordData) {
+        if (!wordData) return;
+        
+        // 基本信息
         const wordElement = document.getElementById('wordText');
         wordElement.textContent = wordData.word;
-        // 添加中文翻译作为title属性
+        
+        // 添加中文翻译到title属性
         if (wordData.chinese) {
             wordElement.title = wordData.chinese;
         }
         
-        document.getElementById('wordPhonetic').textContent = wordData.phonetic || '暂无音标';
+        // 修复：将 'phonetic' 改为 'wordPhonetic'
+        document.getElementById('wordPhonetic').textContent = wordData.pronunciation || '';
         
-        if (wordData.meanings && wordData.meanings.length > 0) {
-            const meaning = wordData.meanings[0];
-            document.getElementById('partOfSpeech').textContent = meaning.partOfSpeech;
-            document.getElementById('definition').textContent = meaning.definition;
-            
-            // 例句处理：只有存在例句时才显示，否则隐藏例句区域
-            const exampleContainer = document.querySelector('.word-example');
-            const exampleSentence = document.getElementById('exampleSentence');
-            
-            if (meaning.example && meaning.example.trim()) {
-                exampleSentence.textContent = meaning.example;
-                exampleContainer.style.display = 'block';
-            } else {
-                exampleContainer.style.display = 'none';
-            }
-        }
+        // 显示多个词义
+        this.displayMeanings(wordData.meanings);
         
-        // 处理图片显示
-        this.handleImageDisplay(wordData);
+        // 显示例句
+        this.displayExamples(wordData.meanings);
+        
+        // 显示同义词反义词
+        this.displayWordRelations(wordData.meanings);
+        
+        // 预加载音频
+        this.preloadWordAudio(wordData);
         
         document.getElementById('wordCard').style.display = 'block';
     }
-
-    // 处理图片显示逻辑
-    handleImageDisplay(wordData) {
-        const imageContainer = document.getElementById('wordImageContainer');
-        const wordImage = document.getElementById('wordImage');
+    
+    // 显示多个词义
+    displayMeanings(meanings) {
+        const container = document.getElementById('wordMeanings');
+        container.innerHTML = '';
         
-        // 本地模式或没有图片URL时隐藏图片
-        if (window.apiManager.getMode() === 'local' || !wordData.imageUrl) {
-            imageContainer.style.display = 'none';
-            return;
+        meanings.forEach((meaning, index) => {
+            const meaningDiv = document.createElement('div');
+            meaningDiv.className = 'meaning-item';
+            meaningDiv.innerHTML = `
+                <div class="meaning-header">
+                    <span class="part-of-speech">${meaning.partOfSpeech}</span>
+                </div>
+                <div class="definition-en">${meaning.definition}</div>
+                ${meaning.chineseDefinition ? `<div class="definition-cn">${meaning.chineseDefinition}</div>` : ''}
+            `;
+            container.appendChild(meaningDiv);
+        });
+    }
+    
+    // 显示例句
+    displayExamples(meanings) {
+        const container = document.getElementById('examplesList');
+        const examplesContainer = document.getElementById('wordExamples');
+        container.innerHTML = '';
+        
+        let hasExamples = false;
+        
+        meanings.forEach(meaning => {
+            if (meaning.examples && meaning.examples.length > 0) {
+                hasExamples = true;
+                meaning.examples.forEach((example, index) => {
+                    const exampleDiv = document.createElement('div');
+                    exampleDiv.className = 'example-item';
+                    exampleDiv.innerHTML = `
+                        <div class="example-en">
+                            <span class="example-text">${example.english}</span>
+                            <button class="audio-btn" onclick="window.vocabularyApp.playExampleAudio('${example.audioFile}', '${example.english}')">
+                                🔊
+                            </button>
+                        </div>
+                        <div class="example-cn">${example.chinese}</div>
+                    `;
+                    container.appendChild(exampleDiv);
+                });
+            }
+        });
+        
+        examplesContainer.style.display = hasExamples ? 'block' : 'none';
+    }
+    
+    // 显示同义词反义词
+    displayWordRelations(meanings) {
+        const container = document.getElementById('wordRelations');
+        const synonymsDiv = document.getElementById('synonyms');
+        const antonymsDiv = document.getElementById('antonyms');
+        
+        let allSynonyms = [];
+        let allAntonyms = [];
+        
+        meanings.forEach(meaning => {
+            if (meaning.synonyms) allSynonyms.push(...meaning.synonyms);
+            if (meaning.antonyms) allAntonyms.push(...meaning.antonyms);
+        });
+        
+        // 去重
+        allSynonyms = [...new Set(allSynonyms)];
+        allAntonyms = [...new Set(allAntonyms)];
+        
+        if (allSynonyms.length > 0) {
+            synonymsDiv.innerHTML = `<strong>同义词:</strong> ${allSynonyms.join(', ')}`;
+        } else {
+            synonymsDiv.innerHTML = '';
         }
         
-        // 在线模式且有图片URL时尝试加载图片
-        if (wordData.imageUrl) {
-            // 先隐藏图片容器，加载成功后再显示
-            imageContainer.style.display = 'none';
-            
-            wordImage.onload = () => {
-                console.log('图片加载成功');
-                imageContainer.style.display = 'block';
-            };
-            
-            wordImage.onerror = () => {
-                console.log('图片加载失败，保持隐藏状态');
-                imageContainer.style.display = 'none';
-            };
-            
-            wordImage.src = wordData.imageUrl;
-            wordImage.alt = `${wordData.word} 的图片`;
+        if (allAntonyms.length > 0) {
+            antonymsDiv.innerHTML = `<strong>反义词:</strong> ${allAntonyms.join(', ')}`;
+        } else {
+            antonymsDiv.innerHTML = '';
+        }
+        
+        container.style.display = (allSynonyms.length > 0 || allAntonyms.length > 0) ? 'block' : 'none';
+    }
+    
+    // 预加载单词相关音频
+    preloadWordAudio(wordData) {
+        const audioFiles = [];
+        
+        if (wordData.audioFile) {
+            audioFiles.push(wordData.audioFile);
+        }
+        
+        wordData.meanings.forEach(meaning => {
+            if (meaning.examples) {
+                meaning.examples.forEach(example => {
+                    if (example.audioFile) {
+                        audioFiles.push(example.audioFile);
+                    }
+                });
+            }
+        });
+        
+        if (window.audioManager && audioFiles.length > 0) {
+            window.audioManager.preloadAudio(audioFiles);
         }
     }
+    
+    // 播放单词发音（增强版）
+    async pronounceWord() {
+        const wordData = this.getCurrentWordData();
+        if (wordData && window.audioManager) {
+            await window.audioManager.speakWord(wordData.word, wordData.audioFile);
+        }
+    }
+    
+    // 播放例句音频
+    async playExampleAudio(audioFile, sentence) {
+        if (window.audioManager) {
+            await window.audioManager.speakSentence(sentence, audioFile);
+        }
+    }
+
+    // 移除 handleImageDisplay 方法
+    // handleImageDisplay(wordData) { ... } - 删除整个方法
 
     // 更新导航按钮状态
     updateNavigationButtons() {
@@ -292,3 +385,4 @@ document.addEventListener('DOMContentLoaded', () => {
     window.vocabularyApp = new VocabularyApp();
     window.vocabularyApp.init();
 });
+
