@@ -173,32 +173,34 @@ class VocabularyApp {
     }
   }
   
-  // 保留这个版本的startLearning（功能更完整）
+  // 保留第一个startLearning方法（第113行），删除第167和177行的重复定义
   async startLearning() {
     this.showLoading();
-    try {
-      await this.loadNextWord();
-    } catch (error) {
-      this.showError(error.message || '加载单词失败');
-    }
-  }
-  
-  // 保留这个版本的loadNextWord（功能更完整）
-  async loadNextWord() {
     try {
       this.currentWord = await this.getNextWord();
       this.displayWord();
     } catch (error) {
-      this.showError(error.message || '加载单词失败');
+      this.showError('获取单词失败，请检查网络连接');
     }
   }
   
-  // 删除第113-116行的重复startLearning方法
-  // 删除第145-148行的重复loadNextWord方法
-}
+  // 保留第一个loadNextWord方法（第145行），删除第187行的重复定义
+  async loadNextWord() {
+    this.currentWord = await this.getNextWord();
+    this.displayWord();
+  }
   
-  // 显示单词 - 添加数据验证
-  // 显示单词 - 添加图片支持
+  // 修复getNextWord方法，移除内部重复定义
+  async getNextWord() {
+    try {
+      return await this.api.getRandomWord();
+    } catch (error) {
+      console.error('获取单词失败:', error);
+      throw error;
+    }
+  }
+  
+  // 将displayWord方法移动到类内部（当前在第202行类外部）
   async displayWord() {
     if (!this.currentWord || !this.currentWord.word) {
       this.showError('单词数据加载失败');

@@ -339,7 +339,9 @@ class VocabularyExtension {
   }
 }
 
-// 将displayQuickMode方法移到这里
+const app = new VocabularyExtension();
+
+// 将displayQuickMode移到类内部
 displayQuickMode() {
   const imageHtml = this.currentWordImage ? 
     `<div class="word-image">
