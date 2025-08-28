@@ -33,10 +33,30 @@
       </main>
 
       <!-- 操作按钮 -->
-      <footer class="controls" id="controls" style="display: none;">
-        <button id="knowBtn" class="btn btn-success">认识</button>
-        <button id="unknownBtn" class="btn btn-danger">不认识</button>
-        <button id="passBtn" class="btn btn-secondary">Pass</button>
+      <!-- 在操作按钮区域添加导航按钮 -->
+      <footer class="controls" id="controls" style="display: none">
+        <!-- 单词导航按钮 -->
+        <div class="word-navigation">
+          <button id="prevBtn" class="btn btn-nav" title="上一个单词">
+            ⬅️ 上一个
+          </button>
+          <span class="word-counter" id="wordCounter">1/1</span>
+          <button id="nextBtn" class="btn btn-nav" title="下一个单词">
+            下一个 ➡️
+          </button>
+        </div>
+
+        <!-- 原有的操作按钮 -->
+        <div class="action-buttons">
+          <button id="knowBtn" class="btn btn-success">认识</button>
+          <button id="unknownBtn" class="btn btn-danger">不认识</button>
+          <button id="passBtn" class="btn btn-secondary">Pass</button>
+        </div>
+
+        <!-- 获取新单词按钮 -->
+        <div class="new-word-section">
+          <button id="newWordBtn" class="btn btn-primary">获取新单词</button>
+        </div>
       </footer>
     </div>
 

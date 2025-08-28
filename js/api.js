@@ -90,24 +90,21 @@ class APIManager {
   
   async getWordImage(word) {
     try {
-      // 使用免费的Lorem Picsum服务 + 搜索关键词
-      // 或者使用Pixabay免费API（无需密钥的版本）
       const searchTerm = encodeURIComponent(word);
       
-      // 方案1: 使用Lorem Picsum（简单但通用图片）
-      const imageUrl = `https://picsum.photos/300/200?random=${word.length}`;
+      // 方案1: 使用Unsplash免费API（更相关的图片）
+      const unsplashUrl = `https://source.unsplash.com/300x200/?${searchTerm}`;
       
-      // 方案2: 使用免费的图标服务
-      // const iconUrl = `https://api.iconify.design/mdi:${word}.svg`;
+      // 方案2: 使用Pixabay免费API（需要注册但免费）
+      // const pixabayUrl = `https://pixabay.com/api/?key=YOUR_KEY&q=${searchTerm}&image_type=photo&per_page=3`;
       
       return {
-        url: imageUrl,
-        alt: `Image for ${word}`,
+        url: unsplashUrl,
+        alt: `Image related to ${word}`,
         fallback: `https://via.placeholder.com/300x200/4CAF50/white?text=${searchTerm}`
       };
     } catch (error) {
       console.error('获取图片失败:', error);
-      // 返回占位符图片
       return {
         url: `https://via.placeholder.com/300x200/4CAF50/white?text=${encodeURIComponent(word)}`,
         alt: `Placeholder for ${word}`,

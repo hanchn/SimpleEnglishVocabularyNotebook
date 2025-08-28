@@ -193,16 +193,71 @@ body {
   border-color: var(--primary-color);
 }
 
-/* 操作按钮区域 */
+/* 单词导航样式 */
+.word-navigation {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  margin-bottom: 15px;
+  padding: 10px;
+  background: var(--background);
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+}
+
+.btn-nav {
+  padding: 8px 16px;
+  font-size: 14px;
+  border-radius: 6px;
+  border: 1px solid var(--border-color);
+  background: var(--background);
+  color: var(--text-color);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-nav:hover:not(:disabled) {
+  background: var(--primary-color);
+  color: white;
+  border-color: var(--primary-color);
+}
+
+.btn-nav:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.word-counter {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--secondary-color);
+  min-width: 60px;
+  text-align: center;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-bottom: 15px;
+}
+
+.new-word-section {
+  display: flex;
+  justify-content: center;
+}
+
+/* 更新controls布局 */
 .controls {
   display: flex;
-  gap: 12px;
+  flex-direction: column;
+  gap: 10px;
   padding: 20px;
   background: var(--background);
-  border-radius: 0 0 12px 12px;
+  border-radius: 12px;
   box-shadow: var(--card-shadow);
   border: 1px solid var(--border-color);
-  border-top: none;
 }
 
 .btn {

@@ -6,6 +6,11 @@ class VocabularyApp {
     this.storage = new StorageManager();
     this.api = new APIManager();
     this.audio = new AudioManager();
+    
+    // 单词历史记录管理
+    this.wordHistory = [];
+    this.currentWordIndex = -1;
+    
     this.init();
   }
   
@@ -60,6 +65,10 @@ class VocabularyApp {
         }
       });
     }
+    
+    // 导航按钮事件
+    document.getElementById('prevBtn').addEventListener('click', () => this.navigateToPrevious());
+    document.getElementById('nextBtn').addEventListener('click', () => this.navigateToNext());
   }
   
   // 加载统计数据
@@ -130,7 +139,10 @@ class VocabularyApp {
   switchMode(mode) {
     this.currentMode = mode;
     this.updateModeUI();
-    this.loadNextWord();
+    // 只重新显示当前单词，不获取新单词
+    if (this.currentWord) {
+      this.displayWord(); // ✅ 保持同一个单词，只改变显示模式
+    }
   }
   
   // 更新模式UI
@@ -483,3 +495,84 @@ class VocabularyApp {
 
 // 应用启动
 const app = new VocabularyApp();
+
+// 添加单词到历史记录
+addWordToHistory(word) {
+  // 如果当前不是在历史记录的末尾，删除后面的记录
+  if (this.currentWordIndex < this.wordHistory.length - 1) {
+    this.wordHistory = this.wordHistory.slice(0, this.currentWordIndex + 1);
+  }
+  
+  // 添加新单词到历史记录
+  this.wordHistory.push(word);
+  this.currentWordIndex = this.wordHistory.length - 1;
+  
+  // 限制历史记录长度（最多保存50个单词）
+  if (this.wordHistory.length > 50) {
+    this.wordHistory.shift();
+    this.currentWordIndex--;
+  }
+  
+  this.updateNavigationUI();
+}
+
+// 导航到上一个单词
+navigateToPrevious() {
+  if (this.currentWordIndex > 0) {
+    this.currentWordIndex--;
+    this.currentWord = this.wordHistory[this.currentWordIndex];
+    this.displayWord();
+    this.updateNavigationUI();
+  }
+}
+
+// 导航到下一个单词
+navigateToNext() {
+  if (this.currentWordIndex < this.wordHistory.length - 1) {
+    this.currentWordIndex++;
+    this.currentWord = this.wordHistory[this.currentWordIndex];
+    this.displayWord();
+    this.updateNavigationUI();
+  }
+}
+
+// 更新导航UI状态
+updateNavigationUI() {
+  const prevBtn = document.getElementById('prevBtn');
+  const nextBtn = document.getElementById('nextBtn');
+  const counter = document.getElementById('wordCounter');
+  
+  // 更新按钮状态
+  prevBtn.disabled = this.currentWordIndex <= 0;
+  nextBtn.disabled = this.currentWordIndex >= this.wordHistory.length - 1;
+  
+  // 更新计数器
+  if (this.wordHistory.length > 0) {
+    counter.textContent = `${this.currentWordIndex + 1}/${this.wordHistory.length}`;
+  } else {
+    counter.textContent = '0/0';
+  }
+}
+
+// 修改loadNextWord方法，添加到历史记录
+async loadNextWord() {
+  try {
+    const newWord = await this.getNextWord();
+    this.currentWord = newWord;
+    this.addWordToHistory(newWord); // 添加到历史记录
+    this.displayWord();
+  } catch (error) {
+    this.showError('获取单词失败，请检查网络连接');
+  }
+}
+
+// 修复switchMode方法，不重新加载单词
+switchMode(mode) {
+  this.currentMode = mode;
+  this.updateModeUI();
+  // 只重新显示当前单词，不获取新单词
+  if (this.currentWord) {
+    this.displayWord();
+  }
+}
+}
