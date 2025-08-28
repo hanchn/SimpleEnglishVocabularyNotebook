@@ -335,11 +335,13 @@ class VocabularyApp {
         }
     }
 
-    // 导出图片功能
+    // 导出图片功能 - 直接导出wordCard
     async exportAsImage() {
         try {
             const wordCard = document.getElementById('wordCard');
             const controls = document.getElementById('controls');
+            const modeSwitch = document.querySelector('.mode-switch-container');
+            const tooltip = document.getElementById('tooltip');
             
             if (!wordCard) {
                 alert('没有找到单词卡片');
@@ -352,32 +354,71 @@ class VocabularyApp {
                 return;
             }
 
-            // 临时隐藏控制按钮
-            const originalDisplay = controls ? controls.style.display : '';
-            if (controls) {
-                controls.style.display = 'none';
-            }
-
-            // 生成图片
-            const canvas = await html2canvas(wordCard, {
-                backgroundColor: '#ffffff',
-                scale: 2, // 提高图片质量
-                useCORS: true,
-                allowTaint: true,
-                width: wordCard.offsetWidth,
-                height: wordCard.offsetHeight
+            // 临时隐藏不需要的元素
+            const elementsToHide = [controls, modeSwitch, tooltip];
+            const originalStyles = [];
+            
+            elementsToHide.forEach((element, index) => {
+                if (element) {
+                    originalStyles[index] = element.style.display;
+                    element.style.display = 'none';
+                }
+            });
+            
+            // 临时隐藏音频按钮
+            const audioButtons = wordCard.querySelectorAll('.audio-btn');
+            const audioButtonStyles = [];
+            audioButtons.forEach((btn, index) => {
+                audioButtonStyles[index] = btn.style.display;
+                btn.style.display = 'none';
             });
 
-            // 恢复控制按钮显示
-            if (controls) {
-                controls.style.display = originalDisplay;
-            }
+            // 等待DOM更新
+            await new Promise(resolve => setTimeout(resolve, 100));
+
+            // 直接对wordCard进行截图
+            const canvas = await html2canvas(wordCard, {
+                backgroundColor: null, // 保持透明背景，让CSS背景显示
+                scale: 2, // 高质量
+                useCORS: true,
+                allowTaint: true,
+                logging: false,
+                scrollX: 0,
+                scrollY: 0,
+                // 确保捕获完整内容
+                height: wordCard.scrollHeight,
+                width: wordCard.scrollWidth,
+                windowWidth: window.innerWidth,
+                windowHeight: window.innerHeight,
+                // 启用更好的渲染
+                foreignObjectRendering: true,
+                removeContainer: false,
+                // 忽略特定元素
+                ignoreElements: function(element) {
+                    return element.classList.contains('controls') || 
+                           element.classList.contains('mode-switch-container') ||
+                           element.classList.contains('audio-btn') ||
+                           element.id === 'tooltip';
+                }
+            });
+
+            // 恢复隐藏的元素
+            elementsToHide.forEach((element, index) => {
+                if (element) {
+                    element.style.display = originalStyles[index] || '';
+                }
+            });
+            
+            // 恢复音频按钮
+            audioButtons.forEach((btn, index) => {
+                btn.style.display = audioButtonStyles[index] || '';
+            });
 
             // 创建下载链接
             const link = document.createElement('a');
-            const currentWord = document.getElementById('wordText').textContent || 'vocabulary';
+            const currentWord = document.getElementById('wordText')?.textContent || 'vocabulary';
             link.download = `${currentWord}-vocabulary-card.png`;
-            link.href = canvas.toDataURL('image/png');
+            link.href = canvas.toDataURL('image/png', 0.95);
             
             // 触发下载
             document.body.appendChild(link);
@@ -389,6 +430,105 @@ class VocabularyApp {
             console.error('导出图片失败:', error);
             alert('导出图片失败，请重试');
         }
+    }
+    
+    // 应用内联样式的辅助方法
+    applyInlineStyles(element) {
+        // 移除不需要的元素
+        const elementsToRemove = element.querySelectorAll('.controls, .mode-switch-container, .tooltip, .audio-btn');
+        elementsToRemove.forEach(el => el.remove());
+        
+        // 应用样式到主要元素
+        const wordText = element.querySelector('.word-text');
+        if (wordText) {
+            wordText.style.cssText = `
+                font-size: 48px;
+                font-weight: bold;
+                color: white;
+                margin-bottom: 10px;
+                text-align: center;
+            `;
+        }
+        
+        const wordPhonetic = element.querySelector('.word-phonetic');
+        if (wordPhonetic) {
+            wordPhonetic.style.cssText = `
+                font-size: 18px;
+                color: rgba(255, 255, 255, 0.8);
+                text-align: center;
+                margin-bottom: 30px;
+            `;
+        }
+        
+        // 词义样式
+        const meaningItems = element.querySelectorAll('.meaning-item');
+        meaningItems.forEach(item => {
+            item.style.cssText = `
+                background: rgba(255, 255, 255, 0.1);
+                border-radius: 10px;
+                padding: 20px;
+                margin-bottom: 15px;
+                color: white;
+                line-height: 1.6;
+            `;
+            
+            const partOfSpeech = item.querySelector('.part-of-speech');
+            if (partOfSpeech) {
+                partOfSpeech.style.cssText = `
+                    color: #ffd700;
+                    font-weight: bold;
+                    font-size: 14px;
+                    margin-bottom: 8px;
+                `;
+            }
+            
+            const definitions = item.querySelectorAll('.definition-en, .definition-cn');
+            definitions.forEach(def => {
+                def.style.cssText = `
+                    color: rgba(255, 255, 255, 0.9);
+                    font-size: 14px;
+                    margin-bottom: 5px;
+                `;
+            });
+        });
+        
+        // 例句样式
+        const exampleItems = element.querySelectorAll('.example-item');
+        exampleItems.forEach(item => {
+            item.style.cssText = `
+                background: rgba(255, 255, 255, 0.05);
+                border-radius: 8px;
+                padding: 15px;
+                margin-bottom: 10px;
+                color: rgba(255, 255, 255, 0.9);
+                font-size: 14px;
+                line-height: 1.5;
+            `;
+        });
+        
+        // 同义词反义词样式
+        const synonyms = element.querySelector('.synonyms');
+        const antonyms = element.querySelector('.antonyms');
+        
+        [synonyms, antonyms].forEach(item => {
+            if (item && item.innerHTML.trim()) {
+                item.style.cssText = `
+                    background: rgba(255, 255, 255, 0.05);
+                    border-radius: 10px;
+                    padding: 15px;
+                    margin-bottom: 10px;
+                    color: rgba(255, 255, 255, 0.8);
+                    font-size: 14px;
+                `;
+            }
+        });
+        
+        // 确保容器样式
+        element.style.cssText = `
+            background: transparent;
+            color: white;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        `;
     }
 
     // 移除 handleImageDisplay 方法
