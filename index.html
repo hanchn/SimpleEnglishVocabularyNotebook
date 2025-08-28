@@ -25,15 +25,87 @@
       <!-- 学习区域 -->
       <main class="learning-area" id="learningArea">
         <!-- 欢迎消息 -->
-        <div class="welcome-message">
+        <div class="welcome-message" id="welcomeMessage">
           <h2>🎯 开始你的英语学习之旅</h2>
           <p>选择学习模式，点击开始学习按钮</p>
           <button id="startBtn" class="btn btn-primary">开始学习</button>
         </div>
+
+        <!-- 单词卡片 - 快速模式 -->
+        <div class="word-card" id="quickModeCard" style="display: none">
+          <div class="word-text" id="wordText">Loading...</div>
+          <div class="word-pronunciation" id="wordPronunciation"></div>
+          <div class="word-meaning" id="wordMeaning">
+            <strong id="partOfSpeech">-</strong><br />
+            <span id="definition">正在加载...</span>
+          </div>
+          <div class="word-example" id="wordExample" style="display: none">
+            例句: <span id="exampleText"></span>
+          </div>
+          <button class="btn btn-secondary" id="playWordBtn">🔊 发音</button>
+        </div>
+
+        <!-- 单词卡片 - 填空模式 -->
+        <div class="word-card" id="fillModeCard" style="display: none">
+          <div class="fill-blank" id="fillBlank">_ _ _ _</div>
+          <div class="word-meaning" id="fillMeaning">
+            <strong id="fillPartOfSpeech">-</strong><br />
+            <span id="fillDefinition">正在加载...</span>
+          </div>
+          <input
+            type="text"
+            class="fill-input"
+            id="fillInput"
+            placeholder="输入单词"
+          />
+          <div class="fill-buttons">
+            <button class="btn btn-primary" id="checkAnswerBtn">
+              检查答案
+            </button>
+            <button class="btn btn-secondary" id="revealAnswerBtn">
+              显示答案
+            </button>
+          </div>
+          <div id="fillResult"></div>
+        </div>
+
+        <!-- 单词卡片 - 例句模式 -->
+        <div class="word-card" id="exampleModeCard" style="display: none">
+          <div class="word-text" id="exampleWordText">Loading...</div>
+          <div class="word-pronunciation" id="exampleWordPronunciation"></div>
+          <div class="word-meaning" id="exampleWordMeaning">
+            <strong id="examplePartOfSpeech">-</strong><br />
+            <span id="exampleDefinition">正在加载...</span>
+          </div>
+          <div class="word-example" id="exampleWordExample">
+            <strong>例句:</strong><br />
+            <span id="exampleSentence">正在加载例句...</span>
+          </div>
+          <div class="example-buttons">
+            <button class="btn btn-secondary" id="playExampleWordBtn">
+              🔊 单词发音
+            </button>
+            <button class="btn btn-secondary" id="playExampleSentenceBtn">
+              🔊 例句发音
+            </button>
+          </div>
+        </div>
+
+        <!-- 错误消息 -->
+        <div class="error-message" id="errorMessage" style="display: none">
+          <h3>⚠️ 出错了</h3>
+          <p id="errorText">发生了未知错误</p>
+          <button class="btn btn-primary" id="retryBtn">重新开始</button>
+        </div>
+
+        <!-- 加载状态 -->
+        <div class="loading" id="loadingMessage" style="display: none">
+          <div class="spinner"></div>
+          <p>正在加载单词...</p>
+        </div>
       </main>
 
       <!-- 操作按钮 -->
-      <!-- 在操作按钮区域添加导航按钮 -->
       <footer class="controls" id="controls" style="display: none">
         <!-- 单词导航按钮 -->
         <div class="word-navigation">
@@ -44,13 +116,6 @@
           <button id="nextBtn" class="btn btn-nav" title="下一个单词">
             下一个 ➡️
           </button>
-        </div>
-
-        <!-- 原有的操作按钮 -->
-        <div class="action-buttons">
-          <button id="knowBtn" class="btn btn-success">认识</button>
-          <button id="unknownBtn" class="btn btn-danger">不认识</button>
-          <button id="passBtn" class="btn btn-secondary">Pass</button>
         </div>
 
         <!-- 获取新单词按钮 -->

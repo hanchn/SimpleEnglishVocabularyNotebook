@@ -17,11 +17,9 @@ class VocabularyApp {
   init() {
     this.bindEvents();
     this.loadStats();
-    this.startLearning();
   }
   
   // 事件绑定
-  // 在bindEvents方法中添加
   bindEvents() {
     // 模式切换
     document.querySelectorAll('.mode-btn').forEach(btn => {
@@ -30,118 +28,101 @@ class VocabularyApp {
       });
     });
     
-    // 操作按钮
-    document.getElementById('knowBtn').addEventListener('click', () => this.markWord('know'));
-    document.getElementById('unknownBtn').addEventListener('click', () => this.markWord('unknown'));
-    document.getElementById('passBtn').addEventListener('click', () => this.passWord());
-    
     // 开始学习按钮
     const startBtn = document.getElementById('startBtn');
     if (startBtn) {
       startBtn.addEventListener('click', () => {
-        console.log('开始学习按钮被点击'); // 调试用
-        const welcomeMsg = document.querySelector('.welcome-message');
-        const controls = document.getElementById('controls');
-        
-        if (welcomeMsg) welcomeMsg.style.display = 'none';
-        if (controls) {
-          controls.style.display = 'flex';
-          console.log('控制按钮已显示'); // 调试用
-        }
-        
+        this.hideWelcomeMessage();
+        this.showControls();
         this.startLearning();
       });
     }
     
-    // 获取新单词按钮
-    const newWordBtn = document.getElementById('newWordBtn');
-    if (newWordBtn) {
-      newWordBtn.addEventListener('click', async () => {
-        try {
-          this.currentWord = await this.api.getRandomWord();
-          this.displayWord();
-        } catch (error) {
-          this.showError('获取新单词失败');
-        }
-      });
+    // 导航按钮
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    if (prevBtn) {
+      prevBtn.addEventListener('click', () => this.navigateToPrevious());
+    }
+    if (nextBtn) {
+      nextBtn.addEventListener('click', () => this.navigateToNext());
     }
     
-    // 导航按钮事件
-    document.getElementById('prevBtn').addEventListener('click', () => this.navigateToPrevious());
-    document.getElementById('nextBtn').addEventListener('click', () => this.navigateToNext());
+    // 填空模式按钮
+    const checkAnswerBtn = document.getElementById('checkAnswerBtn');
+    const revealAnswerBtn = document.getElementById('revealAnswerBtn');
+    if (checkAnswerBtn) {
+      checkAnswerBtn.addEventListener('click', () => this.checkFillAnswer());
+    }
+    if (revealAnswerBtn) {
+      revealAnswerBtn.addEventListener('click', () => this.revealFillAnswer());
+    }
+    
+    // 发音按钮
+    const playWordBtn = document.getElementById('playWordBtn');
+    const playExampleWordBtn = document.getElementById('playExampleWordBtn');
+    if (playWordBtn) {
+      playWordBtn.addEventListener('click', () => this.playCurrentWord());
+    }
+    if (playExampleWordBtn) {
+      playExampleWordBtn.addEventListener('click', () => this.playCurrentWord());
+    }
+    
+    // 重试按钮
+    const retryBtn = document.getElementById('retryBtn');
+    if (retryBtn) retryBtn.addEventListener('click', () => this.startLearning());
   }
   
-  // 加载统计数据
-  loadStats() {
-    const stats = this.storage.getStats();
-    if (stats) {
-      document.getElementById('totalWords').textContent = stats.totalWords || 0;
-      document.getElementById('streakDays').textContent = stats.streakDays || 0;
-    } else {
-      // 没有统计数据时显示空白或提示
-      document.getElementById('totalWords').textContent = '-';
-      document.getElementById('streakDays').textContent = '-';
-    }
+  hideWelcomeMessage() {
+    const welcome = document.getElementById('welcomeMessage');
+    if (welcome) welcome.style.display = 'none';
   }
   
-  // 更新统计数据
-  updateStats(isCorrect) {
-    let stats = this.storage.getStats();
-    
-    // 如果没有统计数据，初始化
-    if (!stats) {
-      this.storage.initializeStats();
-      stats = this.storage.getStats();
-    }
-    
-    stats.totalReviews++;
-    
-    if (isCorrect) {
-      stats.correctAnswers++;
-    }
-    
-    stats.accuracy = Math.round((stats.correctAnswers / stats.totalReviews) * 100);
-    stats.totalWords = this.storage.getAllWords().length;
-    
-    // 更新连续天数
-    const today = new Date().toDateString();
-    if (stats.lastStudyDate !== today) {
-      if (stats.lastStudyDate === new Date(Date.now() - 86400000).toDateString()) {
-        stats.streakDays++;
-      } else {
-        stats.streakDays = 1;
-      }
-      stats.lastStudyDate = today;
-    }
-    
-    this.storage.updateStats(stats);
-    this.loadStats();
+  showControls() {
+    const controls = document.getElementById('controls');
+    if (controls) controls.style.display = 'block';
+  }
+  
+  showLoading() {
+    this.hideAllCards();
+    const loading = document.getElementById('loadingMessage');
+    if (loading) loading.style.display = 'block';
+  }
+  
+  hideAllCards() {
+    const cards = ['quickModeCard', 'fillModeCard', 'exampleModeCard', 'errorMessage', 'loadingMessage'];
+    cards.forEach(cardId => {
+      const card = document.getElementById(cardId);
+      if (card) card.style.display = 'none';
+    });
+  }
+  
+  showError(message) {
+    this.hideAllCards();
+    const errorMsg = document.getElementById('errorMessage');
+    const errorText = document.getElementById('errorText');
+    if (errorMsg) errorMsg.style.display = 'block';
+    if (errorText) errorText.textContent = message;
   }
   
   // 开始学习
   async startLearning() {
-    this.showLoading();
-    await this.loadNextWord();
+    try {
+      await this.loadNextWord();
+    } catch (error) {
+      console.error('开始学习失败:', error);
+      this.showError('开始学习失败，请重试');
+    }
   }
   
-  // 显示加载状态
-  showLoading() {
-    const learningArea = document.getElementById('learningArea');
-    learningArea.innerHTML = `
-      <div class="loading">
-        <div class="spinner"></div>
-        <p>正在加载单词...</p>
-      </div>
-    `;
-  }
-  
-  // 模式切换
+  // 切换模式
   switchMode(mode) {
     this.currentMode = mode;
     this.updateModeUI();
-    // 只重新显示当前单词，不获取新单词
+    
+    // 如果有当前单词，重新显示
     if (this.currentWord) {
-      this.displayWord(); // ✅ 保持同一个单词，只改变显示模式
+      this.displayWord();
     }
   }
   
@@ -149,90 +130,34 @@ class VocabularyApp {
   updateModeUI() {
     document.querySelectorAll('.mode-btn').forEach(btn => {
       btn.classList.remove('active');
+      if (btn.dataset.mode === this.currentMode) {
+        btn.classList.add('active');
+      }
     });
-    document.querySelector(`[data-mode="${this.currentMode}"]`).classList.add('active');
   }
   
   // 加载下一个单词
   async loadNextWord() {
-    this.currentWord = await this.getNextWord();
-    this.displayWord();
-  }
-  
-  // 获取下一个单词（智能频次算法）
-  async getNextWord() {
-    const words = this.storage.getAllWords();
-    if (words.length === 0) {
-      try {
-        return await this.api.getRandomWord();
-      } catch (error) {
-        console.error('获取新单词失败:', error);
-        throw new Error('无法获取单词数据，请检查网络连接');
-      }
-    }
-    
-    // 基于频次算法选择单词
-    return this.selectWordByFrequency(words);
-  }
-  
-  // 开始学习
-  async startLearning() {
     this.showLoading();
     try {
-      await this.loadNextWord();
-    } catch (error) {
-      this.showError(error.message || '加载单词失败');
-    }
-  }
-  
-  // 保留第一个startLearning方法（第113行），删除第167和177行的重复定义
-  async startLearning() {
-    this.showLoading();
-    try {
-      this.currentWord = await this.getNextWord();
+      const word = await this.getNextWord();
+      this.currentWord = word;
+      this.addWordToHistory(word);
       this.displayWord();
     } catch (error) {
-      this.showError('获取单词失败，请检查网络连接');
+      console.error('加载单词失败:', error);
+      this.showError('加载单词失败，请检查网络连接');
     }
   }
   
-  // 保留第一个loadNextWord方法（第145行），删除第187行的重复定义
-  async loadNextWord() {
-    this.currentWord = await this.getNextWord();
-    this.displayWord();
-  }
-  
-  // 修复getNextWord方法，移除内部重复定义
+  // 获取下一个单词
   async getNextWord() {
-    try {
-      return await this.api.getRandomWord();
-    } catch (error) {
-      console.error('获取单词失败:', error);
-      throw error;
-    }
+    return await this.api.getRandomWord();
   }
   
-  // 将displayWord方法移动到类内部（当前在第202行类外部）
-  async displayWord() {
-    if (!this.currentWord || !this.currentWord.word) {
-      this.showError('单词数据加载失败');
-      return;
-    }
-    
-    // 确保meanings数组存在且不为空
-    if (!this.currentWord.meanings || this.currentWord.meanings.length === 0) {
-      this.currentWord.meanings = [{
-        partOfSpeech: 'unknown',
-        definition: '暂无释义',
-        example: ''
-      }];
-    }
-    
-    // 获取单词图片
-    const image = await this.api.getWordImage(this.currentWord.word);
-    this.currentWordImage = image; // 保存图片信息
-    
-    const learningArea = document.getElementById('learningArea');
+  // 显示单词
+  displayWord() {
+    if (!this.currentWord) return;
     
     switch (this.currentMode) {
       case 'quick':
@@ -247,332 +172,212 @@ class VocabularyApp {
     }
   }
   
-  // 快速背诵模式 - 添加安全访问
-  // 快速背诵模式 - 添加图片显示
-  displayQuickMode() {
-    const learningArea = document.getElementById('learningArea');
-    const meaning = this.currentWord.meanings[0] || {
-      partOfSpeech: 'unknown',
-      definition: '暂无释义',
-      example: ''
-    };
+  // 添加单词到历史记录
+  addWordToHistory(word) {
+    // 如果不是通过导航到达的单词，添加到历史记录
+    if (this.currentWordIndex === this.wordHistory.length - 1 || this.currentWordIndex === -1) {
+      this.wordHistory.push(word);
+      this.currentWordIndex = this.wordHistory.length - 1;
+      
+      // 限制历史记录长度
+      if (this.wordHistory.length > 50) {
+        this.wordHistory.shift();
+        this.currentWordIndex--;
+      }
+    }
     
-    const pronunciation = this.currentWord.pronunciation || '[暂无音标]';
-    const imageHtml = this.currentWordImage ? 
-      `<div class="word-image">
-        <img src="${this.currentWordImage.url}" alt="${this.currentWordImage.alt}" 
-             onerror="this.src='${this.currentWordImage.fallback || this.currentWordImage.url}'" 
-             style="max-width: 300px; max-height: 200px; border-radius: 8px; margin: 10px 0;">
-      </div>` : '';
-    
-    learningArea.innerHTML = `
-      <div class="word-card fade-in">
-        <div class="word-text">${this.currentWord.word}</div>
-        <div class="word-pronunciation">
-          ${pronunciation}
-          <button class="audio-btn" onclick="app.playAudio('${this.currentWord.word}')">
-            🔊
-          </button>
-        </div>
-        ${imageHtml}
-        <div class="word-meaning">
-          <strong>${meaning.partOfSpeech}</strong>: ${meaning.definition}
-        </div>
-        ${meaning.example ? `<div class="word-example">"${meaning.example}"</div>` : ''}
-      </div>
-    `;
+    this.updateNavigationUI();
   }
   
-  // 填空模式 - 添加安全访问
-  // 更新displayFillMode方法
+  // 导航到上一个单词
+  navigateToPrevious() {
+    if (this.currentWordIndex > 0) {
+      this.currentWordIndex--;
+      this.currentWord = this.wordHistory[this.currentWordIndex];
+      this.displayWord();
+      this.updateNavigationUI();
+    }
+  }
+  
+  // 导航到下一个单词
+  navigateToNext() {
+    if (this.currentWordIndex < this.wordHistory.length - 1) {
+      this.currentWordIndex++;
+      this.currentWord = this.wordHistory[this.currentWordIndex];
+      this.displayWord();
+      this.updateNavigationUI();
+    } else {
+      // 如果已经是最后一个单词，加载新单词
+      this.loadNextWord();
+    }
+  }
+  
+  // 更新导航UI
+  updateNavigationUI() {
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const counter = document.getElementById('wordCounter');
+    
+    if (prevBtn) {
+      prevBtn.disabled = this.currentWordIndex <= 0;
+    }
+    
+    if (nextBtn) {
+      // 下一个按钮总是可用（可以加载新单词）
+      nextBtn.disabled = false;
+    }
+    
+    if (counter) {
+      counter.textContent = `${this.currentWordIndex + 1}/${this.wordHistory.length}`;
+    }
+  }
+  
+  // 快速模式显示
+  displayQuickMode() {
+    this.hideAllCards();
+    const card = document.getElementById('quickModeCard');
+    if (card) card.style.display = 'block';
+    
+    const meaning = this.currentWord.meanings[0] || {
+      partOfSpeech: 'unknown',
+      definitions: [{ definition: '暂无释义' }]
+    };
+    
+    const definition = meaning.definitions[0]?.definition || '暂无释义';
+    const example = meaning.definitions[0]?.example || '';
+    
+    // 更新内容
+    this.updateElement('wordText', this.currentWord.word);
+    this.updateElement('wordPronunciation', this.currentWord.phonetic || '');
+    this.updateElement('partOfSpeech', meaning.partOfSpeech);
+    this.updateElement('definition', definition);
+    
+    // 处理例句
+    const exampleDiv = document.getElementById('wordExample');
+    const exampleText = document.getElementById('exampleText');
+    if (example && exampleDiv && exampleText) {
+      exampleText.textContent = example;
+      exampleDiv.style.display = 'block';
+    } else if (exampleDiv) {
+      exampleDiv.style.display = 'none';
+    }
+  }
+  
+  // 填空模式显示
   displayFillMode() {
-    const learningArea = document.getElementById('learningArea');
-    const word = this.currentWord.word;
-    const blankedWord = this.createBlankedWord(word);
-    const pronunciation = this.currentWord.pronunciation || '[暂无音标]';
-    const firstMeaning = this.currentWord.meanings[0];
+    this.hideAllCards();
+    const card = document.getElementById('fillModeCard');
+    if (card) card.style.display = 'block';
     
-    learningArea.innerHTML = `
-      <div class="word-card fade-in">
-        <div class="fill-exercise">
-          <h3>🖊️ 填空练习</h3>
-          <div class="word-input-area">
-            <input type="text" 
-                   id="wordInput" 
-                   class="word-input fill-input" 
-                   placeholder="请输入单词..."
-                   autocomplete="off"
-                   spellcheck="false"
-                   onkeypress="if(event.key==='Enter') app.checkFillAnswer(this.value)">
-            <button class="audio-btn" onclick="app.playAudio('${this.currentWord.word}')">
-              🔊
-            </button>
-          </div>
-          <div class="word-pronunciation">${pronunciation}</div>
-          <div class="meaning-hint">
-            <span class="part-of-speech">${firstMeaning.partOfSpeech}</span>
-            <p class="definition">${firstMeaning.definition}</p>
-          </div>
-          <div class="fill-controls">
-            <button class="check-btn" onclick="app.checkFillAnswer(document.getElementById('wordInput').value)">检查答案</button>
-            <button class="reveal-btn" onclick="app.revealFillAnswer()">显示答案</button>
-          </div>
-          <div class="answer-result"></div>
-        </div>
-      </div>
-    `;
+    const meaning = this.currentWord.meanings[0] || {
+      partOfSpeech: 'unknown',
+      definitions: [{ definition: '暂无释义' }]
+    };
     
-    // 设置输入框焦点
+    const definition = meaning.definitions[0]?.definition || '暂无释义';
+    const blankedWord = this.createBlankedWord(this.currentWord.word);
+    
+    // 更新内容
+    this.updateElement('fillBlank', blankedWord);
+    this.updateElement('fillPartOfSpeech', meaning.partOfSpeech);
+    this.updateElement('fillDefinition', definition);
+    
+    // 清空输入框和结果
+    const input = document.getElementById('fillInput');
+    const result = document.getElementById('fillResult');
+    if (input) input.value = '';
+    if (result) result.innerHTML = '';
+    
+    // 聚焦输入框
     setTimeout(() => {
-      const input = document.getElementById('wordInput');
       if (input) input.focus();
     }, 100);
   }
   
-  // 例句学习模式 - 添加安全访问
+  // 例句模式显示
   displayExampleMode() {
-    const learningArea = document.getElementById('learningArea');
+    this.hideAllCards();
+    const card = document.getElementById('exampleModeCard');
+    if (card) card.style.display = 'block';
+    
     const meaning = this.currentWord.meanings[0] || {
       partOfSpeech: 'unknown',
-      definition: '暂无释义',
-      example: ''
+      definitions: [{ definition: '暂无释义' }]
     };
-    const pronunciation = this.currentWord.pronunciation || '[暂无音标]';
     
-    learningArea.innerHTML = `
-      <div class="word-card fade-in">
-        <div class="word-text">${this.currentWord.word}</div>
-        <div class="word-pronunciation">
-          ${pronunciation}
-          <button class="audio-btn" onclick="app.playAudio('${this.currentWord.word}')">
-            🔊
-          </button>
-        </div>
-        <div class="word-meaning">
-          <strong>${meaning.partOfSpeech}</strong>: ${meaning.definition}
-        </div>
-        ${meaning.example ? `
-          <div class="word-example">
-            "${meaning.example}"
-            <button class="audio-btn" onclick="app.playAudio('${meaning.example}')">
-              🔊
-            </button>
-          </div>
-        ` : ''}
-      </div>
-    `;
-  }
-  
-  // 添加错误显示方法
-  showError(message) {
-    const learningArea = document.getElementById('learningArea');
-    learningArea.innerHTML = `
-      <div class="error-message">
-        <p>❌ ${message}</p>
-        <button onclick="app.startLearning()" class="retry-btn">重试</button>
-      </div>
-    `;
+    const definition = meaning.definitions[0]?.definition || '暂无释义';
+    const example = meaning.definitions[0]?.example || '暂无例句';
+    
+    // 更新内容
+    this.updateElement('exampleWordText', this.currentWord.word);
+    this.updateElement('exampleWordPronunciation', this.currentWord.phonetic || '');
+    this.updateElement('examplePartOfSpeech', meaning.partOfSpeech);
+    this.updateElement('exampleDefinition', definition);
+    this.updateElement('exampleSentence', example);
   }
   
   // 创建填空单词
   createBlankedWord(word) {
-    const blankCount = Math.ceil(word.length * 0.4); // 隐藏40%的字母
-    const indices = [];
-    
-    while (indices.length < blankCount) {
-      const index = Math.floor(Math.random() * word.length);
-      if (!indices.includes(index)) {
-        indices.push(index);
-      }
-    }
-    
-    return word.split('').map((char, index) => 
-      indices.includes(index) ? '<span class="blank"></span>' : char
-    ).join('');
-  }
-  
-  // 在VocabularyApp类中添加缺失的方法
-  
-  // 基于频次的单词选择算法
-  selectWordByFrequency(words) {
-    // 根据难度和复习次数计算权重
-    const weightedWords = words.map(word => ({
-      ...word,
-      weight: (word.difficulty + 1) * (1 / (word.reviewCount + 1))
-    }));
-    
-    // 按权重排序，选择权重最高的
-    weightedWords.sort((a, b) => b.weight - a.weight);
-    return weightedWords[0];
+    return word.split('').map(() => '_').join(' ');
   }
   
   // 检查填空答案
-  checkFillAnswer(answer) {
-    const resultDiv = document.querySelector('.answer-result') || this.createAnswerResultDiv();
+  checkFillAnswer() {
+    const input = document.getElementById('fillInput');
+    const result = document.getElementById('fillResult');
     
-    if (answer.toLowerCase().trim() === this.currentWord.word.toLowerCase()) {
-      resultDiv.innerHTML = `
-        <div class="correct-answer">
-          <span class="result-icon">✅</span>
-          <span class="result-text">正确！单词是: <strong>${this.currentWord.word}</strong></span>
-        </div>
-      `;
-      setTimeout(() => this.markWord('know'), 2000);
+    if (!input || !result) return;
+    
+    const userAnswer = input.value.trim().toLowerCase();
+    const correctAnswer = this.currentWord.word.toLowerCase();
+    
+    if (userAnswer === correctAnswer) {
+      result.innerHTML = '<span style="color: green;">✓ 正确！</span>';
     } else {
-      resultDiv.innerHTML = `
-        <div class="wrong-answer">
-          <span class="result-icon">❌</span>
-          <span class="result-text">不正确，再试试看！</span>
-        </div>
-      `;
+      result.innerHTML = `<span style="color: red;">✗ 错误。正确答案是: ${this.currentWord.word}</span>`;
     }
   }
   
-  // 显示答案
+  // 显示填空答案
   revealFillAnswer() {
-    const input = document.querySelector('.fill-input');
-    const resultDiv = document.querySelector('.answer-result') || this.createAnswerResultDiv();
-    
-    if (input) input.value = this.currentWord.word;
-    resultDiv.innerHTML = `
-      <div class="revealed-answer">
-        <span class="result-icon">💡</span>
-        <span class="result-text">答案是: <strong>${this.currentWord.word}</strong></span>
-      </div>
-    `;
-    
-    setTimeout(() => this.markWord('unknown'), 3000);
-  }
-  
-  // 创建答案结果显示区域
-  createAnswerResultDiv() {
-    const resultDiv = document.createElement('div');
-    resultDiv.className = 'answer-result';
-    document.querySelector('.word-card').appendChild(resultDiv);
-    return resultDiv;
-  }
-  
-  // 播放音频
-  playAudio(text) {
-    this.audio.speakWord(text);
-  }
-  
-  // 标记单词
-  markWord(result) {
-    if (!this.currentWord) return;
-    
-    // 更新单词数据
-    this.currentWord.reviewCount++;
-    this.currentWord.lastReviewed = new Date().toISOString();
-    
-    if (result === 'know') {
-      this.currentWord.difficulty = Math.max(0, this.currentWord.difficulty - 1);
-    } else {
-      this.currentWord.difficulty = Math.min(2, this.currentWord.difficulty + 1);
+    const result = document.getElementById('fillResult');
+    if (result) {
+      result.innerHTML = `<span style="color: blue;">答案: ${this.currentWord.word}</span>`;
     }
-    
-    // 保存单词
-    this.storage.saveWord(this.currentWord);
-    
-    // 更新统计
-    this.updateStats(result === 'know');
-    
-    // 加载下一个单词
-    this.loadNextWord();
   }
   
-  // Pass按钮
-  passWord() {
-    if (!this.currentWord) return;
-    
-    this.currentWord.passCount++;
-    this.currentWord.frequency = Math.max(0.1, this.currentWord.frequency - 0.1);
-    this.storage.saveWord(this.currentWord);
-    
-    this.loadNextWord();
+  // 播放当前单词发音
+  playCurrentWord() {
+    if (this.currentWord && this.currentWord.word) {
+      this.audio.playWord(this.currentWord.word);
+    }
+  }
+  
+  // 播放当前例句发音
+  playCurrentSentence() {
+    const meaning = this.currentWord?.meanings[0];
+    const example = meaning?.definitions[0]?.example;
+    if (example) {
+      this.audio.playSentence(example);
+    }
+  }
+  
+  // 加载统计数据
+  loadStats() {
+    // 可以在这里加载学习统计
+  }
+  
+  // 更新统计数据
+  updateStats() {
+    // 可以在这里更新学习统计
+  }
+  
+  // 辅助方法：更新元素内容
+  updateElement(id, content) {
+    const element = document.getElementById(id);
+    if (element) element.textContent = content;
   }
 }
 
-// 应用启动
+// 初始化应用
 const app = new VocabularyApp();
-
-// 添加单词到历史记录
-addWordToHistory(word) {
-  // 如果当前不是在历史记录的末尾，删除后面的记录
-  if (this.currentWordIndex < this.wordHistory.length - 1) {
-    this.wordHistory = this.wordHistory.slice(0, this.currentWordIndex + 1);
-  }
-  
-  // 添加新单词到历史记录
-  this.wordHistory.push(word);
-  this.currentWordIndex = this.wordHistory.length - 1;
-  
-  // 限制历史记录长度（最多保存50个单词）
-  if (this.wordHistory.length > 50) {
-    this.wordHistory.shift();
-    this.currentWordIndex--;
-  }
-  
-  this.updateNavigationUI();
-}
-
-// 导航到上一个单词
-navigateToPrevious() {
-  if (this.currentWordIndex > 0) {
-    this.currentWordIndex--;
-    this.currentWord = this.wordHistory[this.currentWordIndex];
-    this.displayWord();
-    this.updateNavigationUI();
-  }
-}
-
-// 导航到下一个单词
-navigateToNext() {
-  if (this.currentWordIndex < this.wordHistory.length - 1) {
-    this.currentWordIndex++;
-    this.currentWord = this.wordHistory[this.currentWordIndex];
-    this.displayWord();
-    this.updateNavigationUI();
-  }
-}
-
-// 更新导航UI状态
-updateNavigationUI() {
-  const prevBtn = document.getElementById('prevBtn');
-  const nextBtn = document.getElementById('nextBtn');
-  const counter = document.getElementById('wordCounter');
-  
-  // 更新按钮状态
-  prevBtn.disabled = this.currentWordIndex <= 0;
-  nextBtn.disabled = this.currentWordIndex >= this.wordHistory.length - 1;
-  
-  // 更新计数器
-  if (this.wordHistory.length > 0) {
-    counter.textContent = `${this.currentWordIndex + 1}/${this.wordHistory.length}`;
-  } else {
-    counter.textContent = '0/0';
-  }
-}
-
-// 修改loadNextWord方法，添加到历史记录
-async loadNextWord() {
-  try {
-    const newWord = await this.getNextWord();
-    this.currentWord = newWord;
-    this.addWordToHistory(newWord); // 添加到历史记录
-    this.displayWord();
-  } catch (error) {
-    this.showError('获取单词失败，请检查网络连接');
-  }
-}
-
-// 修复switchMode方法，不重新加载单词
-switchMode(mode) {
-  this.currentMode = mode;
-  this.updateModeUI();
-  // 只重新显示当前单词，不获取新单词
-  if (this.currentWord) {
-    this.displayWord();
-  }
-}
-}
