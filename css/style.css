@@ -567,3 +567,29 @@ body {
 .offline-btn:hover {
   background: #616161;
 }
+
+/* 在现有样式基础上添加 */
+.word-image {
+  text-align: center;
+  margin: 15px 0;
+}
+
+.word-image img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease;
+}
+
+.word-image img:hover {
+  transform: scale(1.02);
+}
+
+/* 响应式设计 */
+@media (max-width: 480px) {
+  .word-image img {
+    max-width: 280px;
+    max-height: 180px;
+  }
+}

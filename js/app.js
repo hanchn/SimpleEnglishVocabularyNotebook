@@ -34,8 +34,16 @@ class VocabularyApp {
     const startBtn = document.getElementById('startBtn');
     if (startBtn) {
       startBtn.addEventListener('click', () => {
-        document.querySelector('.welcome-message').style.display = 'none';
-        document.getElementById('controls').style.display = 'flex';
+        console.log('开始学习按钮被点击'); // 调试用
+        const welcomeMsg = document.querySelector('.welcome-message');
+        const controls = document.getElementById('controls');
+        
+        if (welcomeMsg) welcomeMsg.style.display = 'none';
+        if (controls) {
+          controls.style.display = 'flex';
+          console.log('控制按钮已显示'); // 调试用
+        }
+        
         this.startLearning();
       });
     }
@@ -163,6 +171,7 @@ class VocabularyApp {
   }
   
   // 显示单词 - 添加数据验证
+  // 显示单词 - 添加图片支持
   async displayWord() {
     if (!this.currentWord || !this.currentWord.word) {
       this.showError('单词数据加载失败');
@@ -178,6 +187,10 @@ class VocabularyApp {
       }];
     }
     
+    // 获取单词图片
+    const image = await this.api.getWordImage(this.currentWord.word);
+    this.currentWordImage = image; // 保存图片信息
+    
     const learningArea = document.getElementById('learningArea');
     
     switch (this.currentMode) {
@@ -191,15 +204,10 @@ class VocabularyApp {
         this.displayExampleMode();
         break;
     }
-    
-    // 获取单词图片
-    const image = await this.api.getWordImage(this.currentWord.word);
-    if (image) {
-      // 在HTML中添加图片显示
-    }
   }
   
   // 快速背诵模式 - 添加安全访问
+  // 快速背诵模式 - 添加图片显示
   displayQuickMode() {
     const learningArea = document.getElementById('learningArea');
     const meaning = this.currentWord.meanings[0] || {
@@ -209,6 +217,12 @@ class VocabularyApp {
     };
     
     const pronunciation = this.currentWord.pronunciation || '[暂无音标]';
+    const imageHtml = this.currentWordImage ? 
+      `<div class="word-image">
+        <img src="${this.currentWordImage.url}" alt="${this.currentWordImage.alt}" 
+             onerror="this.src='${this.currentWordImage.fallback || this.currentWordImage.url}'" 
+             style="max-width: 300px; max-height: 200px; border-radius: 8px; margin: 10px 0;">
+      </div>` : '';
     
     learningArea.innerHTML = `
       <div class="word-card fade-in">
@@ -219,6 +233,7 @@ class VocabularyApp {
             🔊
           </button>
         </div>
+        ${imageHtml}
         <div class="word-meaning">
           <strong>${meaning.partOfSpeech}</strong>: ${meaning.definition}
         </div>

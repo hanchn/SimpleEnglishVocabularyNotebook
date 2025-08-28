@@ -110,4 +110,29 @@ class ChromeAPIManager {
       passCount: 0
     };
   }
+  
+  // 添加图片获取功能
+  async getWordImage(word) {
+    try {
+      // 使用免费的图片服务
+      const searchTerm = encodeURIComponent(word);
+      
+      // 使用Lorem Picsum + 单词长度作为随机种子
+      const imageUrl = `https://picsum.photos/300/200?random=${word.length + word.charCodeAt(0)}`;
+      
+      return {
+        url: imageUrl,
+        alt: `Image for ${word}`,
+        fallback: `https://via.placeholder.com/300x200/4CAF50/white?text=${searchTerm}`
+      };
+    } catch (error) {
+      console.error('获取图片失败:', error);
+      // 返回占位符图片
+      return {
+        url: `https://via.placeholder.com/300x200/4CAF50/white?text=${encodeURIComponent(word)}`,
+        alt: `Placeholder for ${word}`,
+        fallback: null
+      };
+    }
+  }
 }

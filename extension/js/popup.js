@@ -79,7 +79,18 @@ class VocabularyExtension {
     }
   }
 
-  displayWord() {
+  // 在displayWord方法中添加图片支持
+  async displayWord() {
+    if (!this.currentWord) {
+      this.showError('没有可显示的单词');
+      return;
+    }
+  
+    // 获取单词图片
+    const image = await this.api.getWordImage(this.currentWord.word);
+    this.currentWordImage = image;
+  
+    const wordArea = document.getElementById('wordArea');
     const learningArea = document.getElementById('learningArea');
     if (!this.currentWord) return;
 
@@ -330,3 +341,30 @@ class VocabularyExtension {
 
 // 初始化应用
 const app = new VocabularyExtension();
+
+// 更新快速背诵模式显示
+displayQuickMode() {
+  const imageHtml = this.currentWordImage ? 
+    `<div class="word-image">
+      <img src="${this.currentWordImage.url}" alt="${this.currentWordImage.alt}" 
+           onerror="this.src='${this.currentWordImage.fallback || this.currentWordImage.url}'" 
+           style="max-width: 280px; max-height: 150px; border-radius: 6px; margin: 8px 0;">
+    </div>` : '';
+
+  return `
+    <div class="word-display">
+      <div class="word-text">${this.currentWord.word}</div>
+      <div class="word-pronunciation">
+        ${this.currentWord.pronunciation || '[暂无音标]'}
+        <button class="audio-btn" onclick="ext.playAudio('${this.currentWord.word}')">
+          🔊
+        </button>
+      </div>
+      ${imageHtml}
+      <div class="word-meaning">
+        <strong>${meaning.partOfSpeech}</strong>: ${meaning.definition}
+      </div>
+      ${meaning.example ? `<div class="word-example">"${meaning.example}"</div>` : ''}
+    </div>
+  `;
+}
